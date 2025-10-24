@@ -1,0 +1,156 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Solver configuration schema",
+    "type": "object",
+  
+    "properties": {
+      "solver_type": {
+        "type": "string",
+        "enum": ["euler_explicit", "euler_implicit", "rk4", "rk5", "rk8", "crank_nicolson"]
+      },
+      "geometry": {
+        "type": "string",
+        "enum": ["line", "rectangle", "curve", "surface"]
+      },
+      "time_interval": {
+        "type": "object",
+        "properties": {
+          "start": { "type": "number" },
+          "end": { "type": "number" }
+        },
+        "required": ["start", "end"]
+      },
+      "time_nodes": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "space_nodes": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "initial_conditions": {
+        "$ref": "#/$defs/boundary_conditions"
+      },
+      "boundary_conditions": {
+        "$ref": "#/$defs/boundary_conditions"
+      }
+    },
+  
+    "required": ["solver_type", "geometry", "time_interval", "space_nodes", "initial_conditions", "boundary_conditions"],
+  
+    "oneOf": [
+      {
+        "properties": {
+          "geometry": { "const": "line" },
+          "space_intervals": { "$ref": "#/$defs/space_intervals_1d" }
+        },
+        "required": ["space_intervals"]
+      },
+      {
+        "properties": {
+          "geometry": { "const": "rectangle" },
+          "space_intervals": { "$ref": "#/$defs/space_intervals_2d" }
+        },
+        "required": ["space_intervals"]
+      },
+      {
+        "properties": {
+          "geometry": { "const": "curve" },
+          "space_intervals": { "$ref": "#/$defs/space_intervals_curve" }
+        },
+        "required": ["space_intervals"]
+      },
+      {
+        "properties": {
+          "geometry": { "const": "surface" },
+          "space_intervals": { "$ref": "#/$defs/space_intervals_surface" }
+        },
+        "required": ["space_intervals"]
+      }
+    ],
+  
+    "$defs": {
+      "space_intervals_1d": {
+        "type": "object",
+        "properties": {
+          "x_start": { "type": "number" },
+          "x_end": { "type": "number" }
+        },
+        "required": ["x_start", "x_end"]
+      },
+  
+      "space_intervals_2d": {
+        "type": "object",
+        "properties": {
+          "x_start": { "type": "number" },
+          "x_end": { "type": "number" },
+          "y_start": { "type": "number" },
+          "y_end": { "type": "number" }
+        },
+        "required": ["x_start", "x_end", "y_start", "y_end"]
+      },
+  
+      "space_intervals_curve": {
+        "type": "object",
+        "properties": {
+          "param_u": {
+            "type": "object",
+            "properties": {
+              "u_start": { "type": "number" },
+              "u_end": { "type": "number" }
+            },
+            "required": ["u_start", "u_end"]
+          }
+        },
+        "required": ["param_u"]
+      },
+  
+      "space_intervals_surface": {
+        "type": "object",
+        "properties": {
+          "param_u": {
+            "type": "object",
+            "properties": {
+              "u_start": { "type": "number" },
+              "u_end": { "type": "number" }
+            },
+            "required": ["u_start", "u_end"]
+          },
+          "param_v": {
+            "type": "object",
+            "properties": {
+              "v_start": { "type": "number" },
+              "v_end": { "type": "number" }
+            },
+            "required": ["v_start", "v_end"]
+          }
+        },
+        "required": ["param_u", "param_v"]
+      },
+
+      "initial_conditions": {
+        "type": "object",
+        "properties": {
+            "type": {
+                "type": "string",
+                "enum": ["zero", "constant", "pulse", "double_pulse", "wave", "random", "custom"]
+            },
+            "value": {}
+        },
+        "required": ["type", "value"]
+      },
+  
+      "boundary_conditions": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["Dirichlet", "Neumann", "Periodic", "Custom"]
+          },
+          "value": {}
+        },
+        "required": ["type", "value"]
+      }
+    }
+  }
+  
