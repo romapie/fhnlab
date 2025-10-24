@@ -33,6 +33,10 @@
       },
       "boundary_conditions": {
         "$ref": "#/$defs/boundary_conditions"
+      },
+      "output_path": {
+        "type": "string",
+        "description": "Path to the directory or file where solver results will be saved."
       }
     },
   

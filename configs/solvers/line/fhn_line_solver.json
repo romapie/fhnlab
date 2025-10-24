@@ -1,0 +1,22 @@
+{
+    "solver_type": "rk5",
+    "geometry": "line",
+    "time_interval": {
+        "start": 0.0,
+        "end": 20.0
+    },
+    "space_intervals": {
+        "x_start": 0.0,
+        "x_end": 1.0
+    },
+    "time_nodes": 50000,
+    "space_nodes": 100,
+    "initial_conditions": {
+        "type": "zero",
+        "value": 0.0
+    },
+    "boundary_conditions": {
+        "type": "Dirichlet",
+        "value": 0.0
+    }
+}
