@@ -1,0 +1,196 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Model configuration schema",
+    "type": "object",
+  
+    "properties": {
+      "model_name": {
+        "type": "string",
+        "description": "Name of the model (e.g., FitzHugh-Nagumo, Hodgkin-Huxley, Allen-Cahn)"
+      },
+  
+      "model_type": {
+        "type": "string",
+        "enum": ["ODE", "PDE", "reaction_diffusion", "custom"],
+        "description": "Type of the mathematical model"
+      },
+  
+      "domain": {
+        "type": "string",
+        "enum": ["line", "rectangle", "curve", "surface"],
+        "description": "Domain of the model"
+      },
+  
+      "variables": {
+        "type": "array",
+        "items": { "type": "string" },
+        "minItems": 2,
+        "description": "List of dependent variables (e.g. ['v', 'w'])"
+      },
+  
+      "rhs_equations": {
+        "type": "object",
+        "patternProperties": {
+          "^[A-Za-z0-9_]+$": {
+            "type": "string",
+            "description": "Right-hand side of the equation (e.g. 'v*(1-v)*(v-alpha) - w + I')"
+          }
+        },
+        "minProperties": 2,
+        "description": "System of model equations"
+      },
+  
+      "model_parameters": {
+        "type": "object",
+        "patternProperties": {
+            "^[A-Za-z_][A-Za-z0-9_]*$": {
+                "type": "object",
+                "properties": {
+                    "type": { "type": "string", "enum": ["constant", "space_dependent", "time_dependent"] },
+                    "value": { "type": "number" },
+                    "description": { "type": "string" },
+                    "unit": { "type": "string" }
+                },
+                "required": ["type", "value"],
+                "additionalProperties": false
+            }
+        },
+        "additionalProperties": false
+        },
+  
+        "diffusion_coefficients": {
+            "type": "object",
+            "description": "Diffusion coefficients for reaction–diffusion models",
+            "patternProperties": {
+              "^[A-Za-z0-9_]+$": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["constant", "space_dependent", "tensor", "spatial_scalar_function"],
+                    "description": "Type of diffusion definition"
+                  },
+                  "value": {
+                    "oneOf": [
+                      { "type": "number" },
+                      { "type": "string" },
+                      {
+                        "type": "array",
+                        "items": { "type": "array", "items": { "type": "number" } },
+                        "description": "Tensor form for anisotropic diffusion"
+                      }
+                    ],
+                    "description": "Diffusion value or expression for types other than spatial_scalar_function"
+                  },
+                  "expression": {
+                    "type": "string",
+                    "description": "Mathematical expression for spatially dependent diffusion (used if type is spatial_scalar_function)"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": { "type": "number" },
+                    "description": "Parameters used in the expression"
+                  },
+                  "unit": { "type": "string" },
+                  "description": { "type": "string" }
+                },
+                "required": ["type"],
+                "allOf": [
+                  {
+                    "if": { "properties": { "type": { "const": "constant" } } },
+                    "then": { "required": ["value"] }
+                  },
+                  {
+                    "if": { "properties": { "type": { "const": "spatial_scalar_function" } } },
+                    "then": { "required": ["expression", "parameters"] }
+                  }
+                ],
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+  
+        "external_current": {
+            "type": "object",
+            "description": "External current input (constant, time-dependent, or piecewise function)",
+            "properties": {
+                "type": {
+                "type": "string",
+                "enum": ["constant", "space_dependent", "time_dependent", "time_dependent_func_piecewise"]
+            },
+  
+            "value": {
+                "type": ["number", "null"],
+                "description": "Numerical value for constant external current (optional if expression or intervals are provided)"
+            },
+  
+            "expression": {
+                "type": ["string", "null"],
+                "description": "Expression defining time-dependent or space-dependent current (e.g., 'sin(2*pi*t/T)')"
+            },
+  
+            "parameters": {
+                "type": "object",
+                "patternProperties": {
+                    "^[A-Za-z_][A-Za-z0-9_]*$": { "type": "number" }
+                },
+                "additionalProperties": false,
+                "description": "Parameters used in the expression"
+            },
+  
+            "intervals": {
+                "type": "object",
+                "description": "Intervals for piecewise time-dependent function",
+                "patternProperties": {
+                    "^[A-Za-z0-9_]+$": {
+                    "type": "object",
+                    "properties": {
+                        "left_boundary": { "type": "number" },
+                        "right_boundary": { "type": "number" },
+                        "expression": { "type": "string" },
+                        "parameters": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[A-Za-z_][A-Za-z0-9_]*$": { "type": "number" }
+                            },
+                        "additionalProperties": false
+                        }
+                    },
+                    "required": ["left_boundary", "right_boundary", "expression"],
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+          },
+  
+          "description": { "type": "string" },
+          "unit": { "type": "string" }
+        },
+        "required": ["type"],
+        "additionalProperties": false
+      },
+  
+      "coupling": {
+        "type": "string",
+        "enum": ["none", "linear", "nonlinear"],
+        "description": "Type of coupling between equations"
+      },
+
+      "output_path": {
+        "type": "string",
+        "description": "Path to the directory or file where solver results will be saved."
+      }
+    },
+  
+    "required": ["model_name", "model_type", "variables", "rhs_equations", "model_parameters"],
+    "additionalProperties": false,
+
+    "if": {
+        "properties": { "model_type": { "const": "reaction_diffusion" } }
+    },
+    "then": {
+        "required": ["diffusion_coefficients"]
+    }
+  }
+  

@@ -1,0 +1,80 @@
+{
+    "model_name": "FitzHugh-Nagumo",
+    "model_type": "reaction_diffusion",
+    "domain": "line",
+    "variables": ["v", "w"],
+    "rhs_equations": {
+        "F_1": "1/epsilon * (v * (1 - v) * (v - alpha) - w + I_ext)",
+        "F_2": "beta * v - gamma * w"
+    },
+    "model_parameters": {
+        "alpha": {
+            "type": "constant",
+            "value": 0.5,
+            "description": "-",
+            "unit": "-"
+        },
+        "beta": {
+            "type": "constant",
+            "value": 1.0,
+            "description": "-",
+            "unit": "-"
+        },
+        "gamma": {
+            "type": "constant",
+            "value": 0.2,
+            "description": "-",
+            "unit": "-"
+        },
+        "epsilon": {
+            "type": "constant",
+            "value": 0.001,
+            "description": "-",
+            "unit": "-"
+        }
+    },
+    "diffusion_coefficients": {
+        "D_1": {
+            "type": "spatial_scalar_function",
+            "expression": "sin(2*pi*x/L)",
+            "parameters": { 
+                "L": 5.0 
+            },
+            "description": "-",
+            "unit": "-"
+        },
+        "D_2": {
+            "type": "spatial_scalar_function",
+            "expression": "sin(2*pi*x/L)",
+            "parameters": { 
+                "L": 5.0 
+            },
+            "description": "-",
+            "unit": "-"
+        }
+    },
+    "external_current": {
+        "type": "time_dependent_func_piecewise",
+        "intervals": {
+            "first_interval": {
+                "left_boundary": 0,
+                "right_boundary": 10,
+                "expression": "sin(2*pi*t/T1)",
+                "parameters": {
+                    "T1": 10
+                }
+            },
+            "second_interval": {
+                "left_boundary": 10,
+                "right_boundary": 20,
+                "expression": "sin(2*pi*t/T2)",
+                "parameters": {
+                    "T2": 10
+                }
+            }
+        },
+        "description": "-",
+        "unit": "-"
+    },
+    "output_path": "-"
+}

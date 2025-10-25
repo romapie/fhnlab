@@ -1,0 +1,37 @@
+{
+    "model_name": "FitzHugh-Nagumo",
+    "model_type": "ODE",
+    "domain": "line",
+    "variables": ["v", "w"],
+    "rhs_equations": {
+        "F_1": "1/epsilon * (v * (1 - v) * (v - alpha) - w)",
+        "F_2": "beta * v - gamma * w"
+    },
+    "model_parameters": {
+        "alpha": {
+            "type": "constant",
+            "value": 0.5,
+            "description": "-",
+            "unit": "-"
+        },
+        "beta": {
+            "type": "constant",
+            "value": 1.0,
+            "description": "-",
+            "unit": "-"
+        },
+        "gamma": {
+            "type": "constant",
+            "value": 0.2,
+            "description": "-",
+            "unit": "-"
+        },
+        "epsilon": {
+            "type": "constant",
+            "value": 0.001,
+            "description": "-",
+            "unit": "-"
+        }
+    },
+    "output_path": "-"
+}
