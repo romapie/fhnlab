@@ -1,0 +1,21 @@
+{
+    "experiment_name": "FitzHughNagumo_1D_sweep",
+    "description": "Test of reaction-diffusion FitzHugh-Nagumo model with varying epsilon and beta",
+    "model_config": "configs/models/fhn_model.json",
+    "solver_config": "configs/solvers/rk5_line.json",
+    "plot_configs": [
+      "configs/plots/v_time_series.json",
+      "configs/plots/w_space_profile.json"
+    ],
+    "logging_config": "configs/logging/log_config.json",
+    "output_path": "results/fhn_experiment_1",
+    "repetitions": 3,
+    "tags": ["reaction_diffusion", "FHN", "1D", "parameter_sweep"],
+    "notes": "This experiment tests the impact of varying epsilon and beta on wave propagation.",
+    "parameter_sweep": {
+      "epsilon": [0.001, 0.005, 0.01],
+      "beta": [0.9, 1.0, 1.1]
+    }
+}
+  
+  

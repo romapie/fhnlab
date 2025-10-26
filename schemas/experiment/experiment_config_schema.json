@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Experiment configuration schema",
+  "type": "object",
+
+  "properties": {
+    "experiment_name": {
+      "type": "string",
+      "description": "Unique name for the experiment"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of the experiment"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start time of the experiment (auto-generated if missing)"
+    },
+    "model_config": {
+      "type": "string",
+      "description": "Path or ID of model configuration JSON"
+    },
+    "solver_config": {
+      "type": "string",
+      "description": "Path or ID of solver configuration JSON"
+    },
+    "plot_configs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of plot configuration JSON files or IDs"
+    },
+    "logging_config": {
+      "type": "string",
+      "description": "Path or ID of logging configuration JSON"
+    },
+    "repetitions": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Number of repeated runs"
+    },
+    "parameter_sweep": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Za-z_][A-Za-z0-9_]*$": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "List of values to sweep for this parameter"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "required": ["experiment_name", "model_config", "solver_config"],
+  "additionalProperties": false
+}
