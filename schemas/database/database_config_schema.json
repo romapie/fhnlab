@@ -1,0 +1,70 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "Database Configuration Schema",
+    "type": "object",
+    "properties": {
+      "db_type": {
+        "type": "string",
+        "enum": ["sqlite", "postgresql", "mysql"],
+        "description": "Type of the database backend"
+      },
+      "db_path": {
+        "type": "string",
+        "description": "Path to database file or connection string"
+      },
+      "tables": {
+        "type": "object",
+        "properties": {
+          "experiments": {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "model_name": { "type": "string" },
+                  "solver_type": { "type": "string" },
+                  "created_time": { "type": "string", "format": "date-time" },
+                  "start_time": { "type": "string", "format": "date-time" },
+                  "end_time": { "type": "string", "format": "date-time" },
+                  "status": { "type": "string" },
+                  "input_path": { "type": "string" },
+                  "output_path": { "type": "string" },
+                  "host": { "type": "string" },
+                  "message": { "type": "string" }
+                },
+                "required": [
+                  "id",
+                  "model_name",
+                  "status",
+                  "created_time",
+                  "start_time"
+                ]
+              }
+            },
+            "required": ["columns"]
+          },
+          "logs": {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "experiment_id": { "type": "integer" },
+                  "timestamp": { "type": "string", "format": "date-time" },
+                  "level": { "type": "string" },
+                  "message": { "type": "string" }
+                },
+                "required": ["id", "timestamp", "level", "message"]
+              }
+            },
+            "required": ["columns"]
+          }
+        },
+        "required": ["experiments"]
+      }
+    },
+    "required": ["db_type", "db_path", "tables"]
+  }
+  

@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Logging Configuration Schema",
+    "type": "object",
+    "properties": {
+      "version": {
+        "type": "integer",
+        "const": 1,
+        "description": "Version of the logging configuration format"
+      },
+      "level": {
+        "type": "string",
+        "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        "description": "Root logging level"
+      },
+      "formatters": {
+        "type": "object",
+        "description": "Logging output formatters",
+        "properties": {
+          "standard": {
+            "type": "object",
+            "properties": {
+              "format": { "type": "string" },
+              "datefmt": { "type": "string" }
+            },
+            "required": ["format"]
+          }
+        }
+      },
+      "handlers": {
+        "type": "object",
+        "description": "Handlers define where logs are written",
+        "properties": {
+          "console": {
+            "type": "object",
+            "properties": {
+              "class": { "type": "string", "const": "logging.StreamHandler" },
+              "level": {
+                "type": "string",
+                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+              },
+              "formatter": { "type": "string" }
+            },
+            "required": ["class", "level", "formatter"]
+          },
+          "file": {
+            "type": "object",
+            "properties": {
+              "class": { "type": "string", "const": "logging.FileHandler" },
+              "level": {
+                "type": "string",
+                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+              },
+              "formatter": { "type": "string" },
+              "filename": { "type": "string" },
+              "mode": {
+                "type": "string",
+                "enum": ["a", "w"],
+                "default": "a"
+              }
+            },
+            "required": ["class", "level", "formatter", "filename"]
+          },
+          "database": {
+            "type": "object",
+            "properties": {
+              "class": {
+                "type": "string",
+                "const": "custom.DatabaseHandler"
+              },
+              "level": {
+                "type": "string",
+                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+              },
+              "formatter": { "type": "string" },
+              "table": { "type": "string" }
+            },
+            "required": ["class", "level", "formatter"]
+          }
+        }
+      },
+      "loggers": {
+        "type": "object",
+        "description": "Defines loggers for different modules",
+        "patternProperties": {
+          "^[a-zA-Z0-9_.-]+$": {
+            "type": "object",
+            "properties": {
+              "level": {
+                "type": "string",
+                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+              },
+              "handlers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["console", "file", "database"]
+                }
+              },
+              "propagate": { "type": "boolean" }
+            },
+            "required": ["level", "handlers"]
+          }
+        }
+      }
+    },
+    "required": ["version", "level", "formatters", "handlers", "loggers"]
+  }
+    

@@ -1,0 +1,33 @@
+{
+    "db_type": "sqlite",
+    "db_path": "data/experiments.db",
+  
+    "tables": {
+      "experiments": {
+        "columns": {
+          "id": "TEXT PRIMARY KEY",
+          "model_name": "TEXT NOT NULL",
+          "solver_type": "TEXT",
+          "created_time": "DATETIME DEFAULT CURRENT_TIMESTAMP",
+          "start_time": "DATETIME",
+          "end_time": "DATETIME",
+          "status": "TEXT",
+          "input_path": "TEXT",
+          "output_path": "TEXT",
+          "host": "TEXT",
+          "message": "TEXT"
+        }
+      },
+  
+      "logs": {
+        "columns": {
+          "id": "TEXT PRIMARY KEY",
+          "experiment_id": "INTEGER",
+          "timestamp": "DATETIME DEFAULT CURRENT_TIMESTAMP",
+          "level": "TEXT",
+          "message": "TEXT"
+        }
+      }
+    }
+  }
+  
