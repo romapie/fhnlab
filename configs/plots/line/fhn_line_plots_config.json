@@ -1,0 +1,414 @@
+{
+    "simulation_info": {
+      "geometry": "1D",
+      "domain_type": "line_segment"
+    },
+  
+    "global_output": {
+      "save_all": true,
+      "output_directory": "./output/1d_line_simulation",
+      "file_format": "pdf",
+      "dpi": 300,
+      "transparent": false,
+      "bbox_inches": "tight"
+    },
+  
+    "plots": [
+      {
+        "plot_name": "diffusion_coefficients",
+        "plot_type": "space_profile",
+        "geometry": "1D",
+        "layout": {
+          "subplot_grid": [2, 1],
+          "shared_x_axis": true,
+          "figure_size": [10, 6]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {
+                "variable": "K1",
+                "label": "K₁ (spatially_varying)",
+                "color": "red",
+                "style": "solid",
+                "linewidth": 2
+              }
+            ],
+            "overlays": [
+              {
+                "type": "shaded_area",
+                "y_data": "K1",
+                "alpha": 0.3,
+                "color": "red"
+              }
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "K₁ [diffusion for v]",
+              "x_lim": [0, 10],
+              "y_lim": [0.005, 0.015]
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {
+                "variable": "K2",
+                "label": "K₂ (spatially_varying)",
+                "color": "blue",
+                "style": "solid",
+                "linewidth": 2
+              }
+            ],
+            "overlays": [
+              {
+                "type": "shaded_area",
+                "y_data": "K2",
+                "alpha": 0.3,
+                "color": "blue"
+              }
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "K₂ [diffusion for w]",
+              "x_lim": [0, 10],
+              "y_lim": [0.0035, 0.0065]
+            }
+          }
+        ],
+        "style": {
+          "title": "Diffusion Coefficients - Spatially varying (sinusoidal) diffusion",
+          "grid": {"show": true, "alpha": 0.3}
+        }
+      },
+  
+      {
+        "plot_name": "spacetime_evolution",
+        "plot_type": "heatmap",
+        "geometry": "1D",
+        "layout": {
+          "subplot_grid": [2, 1],
+          "figure_size": [10, 8]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "v", "label": "v"}
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "Time [ms]",
+              "x_lim": [0, 10],
+              "y_lim": [0, 1000]
+            },
+            "colorbar": {
+              "show": true,
+              "label": "v",
+              "limits": [-0.2, 1.0],
+              "orientation": "vertical"
+            },
+            "style": {
+              "title": "Variable v: Space-Time Evolution (spatially_varying diffusion, dirichlet BC)",
+              "colormap": "RdBu_r"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "w", "label": "w"}
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "Time [ms]",
+              "x_lim": [0, 10],
+              "y_lim": [0, 1000]
+            },
+            "colorbar": {
+              "show": true,
+              "label": "w",
+              "limits": [0.0, 0.12],
+              "orientation": "vertical"
+            },
+            "style": {
+              "title": "Variable w: Space-Time Evolution (spatially_varying diffusion, dirichlet BC)",
+              "colormap": "viridis"
+            }
+          }
+        ]
+      },
+  
+      {
+        "plot_name": "snapshots_grid",
+        "plot_type": "space_profile",
+        "geometry": "1D",
+        "layout": {
+          "subplot_grid": [6, 2],
+          "shared_x_axis": true,
+          "figure_size": [12, 14]
+        },
+        "time_snapshots": {
+          "times": [0, 100, 200, 400, 600, 800],
+          "time_unit": "ms"
+        },
+        "data_sources": [
+          {"variable": "v", "color": "blue", "style": "solid", "linewidth": 2},
+          {"variable": "w", "color": "green", "style": "solid", "linewidth": 2}
+        ],
+        "overlays": [
+          {
+            "type": "diffusion_field",
+            "variable": "K1",
+            "style": {
+              "color": "red",
+              "alpha": 0.2,
+              "fill": true
+            },
+            "normalize": true,
+            "label": "K₁ (normalized)"
+          }
+        ],
+        "axes": {
+          "x_label": "Position x",
+          "x_lim": [0, 10]
+        },
+        "style": {
+          "title": "Snapshots - spatially_varying diffusion, dirichlet BC",
+          "grid": {"show": true}
+        }
+      },
+  
+      {
+        "plot_name": "phase_portrait",
+        "plot_type": "phase_plane",
+        "geometry": "1D",
+        "spatial_locations": [
+          {"coordinates": [1.24], "label": "x=1.24 (K₁=1.5e-02)", "color": "C0"},
+          {"coordinates": [2.51], "label": "x=2.51 (K₁=1.0e-02)", "color": "C1"},
+          {"coordinates": [5.01], "label": "x=5.01 (K₁=1.0e-02)", "color": "C2"},
+          {"coordinates": [7.52], "label": "x=7.52 (K₁=9.9e-03)", "color": "C3"},
+          {"coordinates": [8.76], "label": "x=8.76 (K₁=5.0e-03)", "color": "C4"}
+        ],
+        "data_sources": [
+          {"variable": "v_w_trajectory", "style": "solid", "linewidth": 1.5}
+        ],
+        "overlays": [
+          {
+            "type": "nullcline",
+            "variable": "v",
+            "equation": "w = v(1-v)(v-0.1)",
+            "label": "v-nullcline",
+            "style": {
+              "color": "red",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          },
+          {
+            "type": "nullcline",
+            "variable": "w",
+            "equation": "w = v/γ",
+            "label": "w-nullcline",
+            "style": {
+              "color": "blue",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          }
+        ],
+        "axes": {
+          "x_label": "v",
+          "y_label": "w",
+          "x_lim": [-0.2, 1.0],
+          "y_lim": [-0.1, 0.5]
+        },
+        "style": {
+          "title": "Phase Portrait (spatially_varying diffusion, dirichlet BC)",
+          "legend": {
+            "show": true,
+            "location": "upper left"
+          },
+          "grid": {"show": true, "alpha": 0.3}
+        }
+      },
+  
+      {
+        "plot_name": "wave_propagation",
+        "plot_type": "time_series",
+        "geometry": "1D",
+        "data_sources": [
+          {
+            "variable": "peak_position",
+            "label": "Peak position",
+            "color": "blue",
+            "style": "solid",
+            "linewidth": 2
+          }
+        ],
+        "axes": {
+          "x_label": "Time [ms]",
+          "y_label": "Peak position x",
+          "x_lim": [0, 60],
+          "y_lim": [0, 10]
+        },
+        "style": {
+          "title": "Wave Propagation Analysis (spatially_varying diffusion, dirichlet BC)",
+          "grid": {"show": true},
+          "legend": {"show": false}
+        },
+        "annotations": [
+          {
+            "type": "text_box",
+            "text": "Diffusion: spatially_varying\nBC: dirichlet",
+            "position": [0.05, 0.95],
+            "coordinate_system": "axes_fraction"
+          }
+        ]
+      },
+  
+      {
+        "plot_name": "diffusion_effects_analysis",
+        "plot_type": "correlation",
+        "geometry": "1D",
+        "layout": {
+          "subplot_grid": [2, 2],
+          "figure_size": [12, 10]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "plot_type": "space_profile",
+            "data_sources": [
+              {"variable": "K1", "color": "red", "label": "K₁"},
+              {"variable": "K2", "color": "blue", "label": "K₂"}
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "Diffusion coefficient",
+              "x_lim": [0, 10]
+            },
+            "style": {
+              "title": "Spatial variation of diffusion"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "plot_type": "space_profile",
+            "data_sources": [
+              {"variable": "mean_v", "color": "blue", "label": "Mean v"}
+            ],
+            "overlays": [
+              {
+                "type": "diffusion_field",
+                "variable": "K1",
+                "style": {"color": "red", "alpha": 0.2, "linestyle": "dashed"}
+              }
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "Mean v",
+              "x_lim": [0, 10]
+            },
+            "style": {
+              "title": "Mean activity vs diffusion"
+            }
+          },
+          {
+            "subplot_index": 3,
+            "plot_type": "space_profile",
+            "data_sources": [
+              {"variable": "var_v", "color": "green", "label": "Var(v)"}
+            ],
+            "overlays": [
+              {
+                "type": "diffusion_field",
+                "variable": "K1",
+                "style": {"color": "red", "alpha": 0.2, "linestyle": "dashed"}
+              }
+            ],
+            "axes": {
+              "x_label": "Position x",
+              "y_label": "Var(v)",
+              "x_lim": [0, 10]
+            },
+            "style": {
+              "title": "Variance vs diffusion"
+            }
+          },
+          {
+            "subplot_index": 4,
+            "plot_type": "correlation",
+            "data_sources": [
+              {
+                "variable": "K1_vs_mean_v",
+                "marker": "o",
+                "color": "blue",
+                "alpha": 0.6,
+                "size": 3
+              }
+            ],
+            "axes": {
+              "x_label": "K₁",
+              "y_label": "Mean v",
+              "x_lim": [0.006, 0.014],
+              "y_lim": [-0.01, 0.025]
+            },
+            "style": {
+              "title": "Correlation Analysis (r=0.619)"
+            },
+            "annotations": [
+              {
+                "type": "text_box",
+                "text": "Correlation K₁-Mean(v): r=0.619, p=4.283e-52\nCorrelation K₁-Var(v): r=0.522, p=5.728e-35",
+                "position": [0.05, 0.95]
+              }
+            ]
+          }
+        ],
+        "style": {
+          "title": "Spatially Varying Diffusion Effects"
+        }
+      },
+  
+      {
+        "plot_name": "final_distributions",
+        "plot_type": "histogram",
+        "geometry": "1D",
+        "layout": {
+          "subplot_grid": [1, 2],
+          "figure_size": [10, 4]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "v_final", "color": "blue", "bins": 50}
+            ],
+            "axes": {
+              "x_label": "v value",
+              "y_label": "Frequency",
+              "x_scale": "linear"
+            },
+            "style": {
+              "title": "Distribution of v at final time"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "w_final", "color": "green", "bins": 50}
+            ],
+            "axes": {
+              "x_label": "w value",
+              "y_label": "Frequency",
+              "x_scale": "linear"
+            },
+            "style": {
+              "title": "Distribution of w at final time"
+            }
+          }
+        ]
+      }
+    ]
+  }

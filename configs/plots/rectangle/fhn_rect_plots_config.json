@@ -1,0 +1,378 @@
+{
+    "simulation_info": {
+      "geometry": "2D",
+      "domain_type": "rectangle"
+    },
+  
+    "global_output": {
+      "save_all": true,
+      "output_directory": "./output/2d_rectangle_simulation",
+      "file_format": "pdf",
+      "dpi": 300,
+      "transparent": false,
+      "bbox_inches": "tight"
+    },
+  
+    "plots": [
+      {
+        "plot_name": "initial_condition",
+        "plot_type": "heatmap",
+        "geometry": "2D",
+        "data_sources": [
+          {"variable": "v", "label": "v"}
+        ],
+        "time_snapshots": {
+          "times": [0],
+          "time_unit": "ms"
+        },
+        "axes": {
+          "x_label": "x [cm]",
+          "y_label": "y [cm]",
+          "x_lim": [0, 2.5],
+          "y_lim": [0, 2.5],
+          "aspect": "equal"
+        },
+        "colorbar": {
+          "show": true,
+          "label": "v",
+          "limits": [0.0, 1.0],
+          "orientation": "vertical"
+        },
+        "style": {
+          "title": "v at t = 0 ms",
+          "colormap": "RdBu_r"
+        }
+      },
+  
+      {
+        "plot_name": "spiral_wave_evolution",
+        "plot_type": "heatmap",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [2, 3],
+          "figure_size": [15, 10]
+        },
+        "time_snapshots": {
+          "times": [0, 50, 100, 200, 300, 400],
+          "time_unit": "ms"
+        },
+        "data_sources": [
+          {"variable": "v", "label": "v"}
+        ],
+        "axes": {
+          "x_label": "x [cm]",
+          "y_label": "y [cm]",
+          "x_lim": [0, 2.5],
+          "y_lim": [0, 2.5],
+          "aspect": "equal"
+        },
+        "colorbar": {
+          "show": true,
+          "label": "v",
+          "limits": [-0.2, 1.0],
+          "orientation": "vertical"
+        },
+        "style": {
+          "colormap": "RdBu_r",
+          "font_size": {
+            "title": 12,
+            "labels": 10,
+            "ticks": 9
+          }
+        }
+      },
+  
+      {
+        "plot_name": "v_w_both_variables",
+        "plot_type": "heatmap",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [6, 2],
+          "figure_size": [12, 18]
+        },
+        "time_snapshots": {
+          "times": [0, 50, 100, 200, 300, 400],
+          "time_unit": "ms"
+        },
+        "subplots": [
+          {
+            "variable": "v",
+            "subplot_indices": [1, 3, 5, 7, 9, 11],
+            "colorbar": {
+              "show": true,
+              "label": "v",
+              "limits": [-0.2, 1.0]
+            },
+            "style": {
+              "colormap": "RdBu_r"
+            }
+          },
+          {
+            "variable": "w",
+            "subplot_indices": [2, 4, 6, 8, 10, 12],
+            "colorbar": {
+              "show": true,
+              "label": "w",
+              "limits": [0.0, 0.18]
+            },
+            "style": {
+              "colormap": "YlGn"
+            }
+          }
+        ],
+        "axes": {
+          "x_label": "x [cm]",
+          "y_label": "y [cm]",
+          "aspect": "equal"
+        }
+      },
+  
+      {
+        "plot_name": "diffusion_coefficients_2d",
+        "plot_type": "heatmap",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [1, 2],
+          "figure_size": [12, 5]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "K1", "label": "K₁"}
+            ],
+            "axes": {
+              "x_label": "x [cm]",
+              "y_label": "y [cm]",
+              "aspect": "equal"
+            },
+            "colorbar": {
+              "show": true,
+              "label": "K₁ [cm²/ms]",
+              "limits": [6e-5, 1.4e-4],
+              "orientation": "vertical"
+            },
+            "style": {
+              "title": "Diffusion coefficient K₁(x,y) for v",
+              "colormap": "hot"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "K2", "label": "K₂"}
+            ],
+            "axes": {
+              "x_label": "x [cm]",
+              "y_label": "y [cm]",
+              "aspect": "equal"
+            },
+            "colorbar": {
+              "show": true,
+              "label": "K₂ [cm²/ms]",
+              "limits": [7e-7, 1.3e-6],
+              "orientation": "vertical"
+            },
+            "style": {
+              "title": "Diffusion coefficient K₂(x,y) for w",
+              "colormap": "hot"
+            }
+          }
+        ]
+      },
+  
+      {
+        "plot_name": "time_evolution_at_locations",
+        "plot_type": "time_series",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [2, 1],
+          "shared_x_axis": true,
+          "figure_size": [10, 8]
+        },
+        "spatial_locations": [
+          {"coordinates": [1.25, 1.25], "label": "(1.25, 1.25)", "color": "C0"},
+          {"coordinates": [0.63, 0.63], "label": "(0.63, 0.63)", "color": "C1"},
+          {"coordinates": [1.87, 1.87], "label": "(1.87, 1.87)", "color": "C2"},
+          {"coordinates": [0.63, 1.87], "label": "(0.63, 1.87)", "color": "C3"},
+          {"coordinates": [1.87, 0.63], "label": "(1.87, 0.63)", "color": "C4"}
+        ],
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "v", "style": "solid", "linewidth": 2}
+            ],
+            "axes": {
+              "y_label": "v",
+              "x_lim": [0, 500],
+              "y_lim": [-0.2, 1.0]
+            },
+            "style": {
+              "title": "Time evolution of v at different locations"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "w", "style": "solid", "linewidth": 2}
+            ],
+            "axes": {
+              "x_label": "Time [ms]",
+              "y_label": "w",
+              "x_lim": [0, 500],
+              "y_lim": [0.0, 0.12]
+            },
+            "style": {
+              "title": "Time evolution of w at different locations"
+            }
+          }
+        ],
+        "style": {
+          "legend": {
+            "show": true,
+            "location": "upper right"
+          },
+          "grid": {"show": true}
+        }
+      },
+  
+      {
+        "plot_name": "phase_portrait_2d",
+        "plot_type": "phase_plane",
+        "geometry": "2D",
+        "data_sources": [
+          {
+            "variable": "v_w_trajectory",
+            "time_points": [0, 100, 200, 300, 400, 500],
+            "marker": "o",
+            "markersize": 2,
+            "alpha": 0.6
+          }
+        ],
+        "overlays": [
+          {
+            "type": "nullcline",
+            "variable": "v",
+            "label": "v-nullcline",
+            "style": {
+              "color": "red",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          },
+          {
+            "type": "nullcline",
+            "variable": "w",
+            "label": "w-nullcline",
+            "style": {
+              "color": "blue",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          }
+        ],
+        "axes": {
+          "x_label": "v",
+          "y_label": "w",
+          "x_lim": [-0.2, 1.0],
+          "y_lim": [-0.1, 0.35]
+        },
+        "style": {
+          "title": "Phase Portrait v-w",
+          "legend": {
+            "show": true,
+            "location": "upper right"
+          },
+          "grid": {"show": true, "alpha": 0.3}
+        }
+      },
+  
+      {
+        "plot_name": "final_distributions_2d",
+        "plot_type": "histogram",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [1, 2],
+          "figure_size": [10, 4]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "v_final", "color": "blue", "bins": 50, "edgecolor": "black"}
+            ],
+            "axes": {
+              "x_label": "v value",
+              "y_label": "Frequency",
+              "x_lim": [-0.4, 1.0]
+            },
+            "style": {
+              "title": "Distribution of v at final time"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "w_final", "color": "green", "bins": 50, "edgecolor": "black"}
+            ],
+            "axes": {
+              "x_label": "w value",
+              "y_label": "Frequency",
+              "x_lim": [0.0, 0.12]
+            },
+            "style": {
+              "title": "Distribution of w at final time"
+            }
+          }
+        ]
+      },
+  
+      {
+        "plot_name": "activity_statistics",
+        "plot_type": "time_series",
+        "geometry": "2D",
+        "layout": {
+          "subplot_grid": [2, 2],
+          "figure_size": [12, 10]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "mean_v", "label": "Mean v", "color": "blue", "linewidth": 2},
+              {"variable": "mean_w", "label": "Mean w", "color": "green", "linewidth": 2}
+            ],
+            "axes": {
+              "x_label": "Time [ms]",
+              "y_label": "Mean value",
+              "x_lim": [0, 500]
+            },
+            "style": {
+              "title": "Mean activity over time",
+              "legend": {"show": true}
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "std_v", "label": "Std(v)", "color": "blue", "linewidth": 2},
+              {"variable": "std_w", "label": "Std(w)", "color": "green", "linewidth": 2}
+            ],
+            "axes": {
+              "x_label": "Time [ms]",
+              "y_label": "Standard deviation",
+              "x_lim": [0, 500]
+            },
+            "style": {
+              "title": "Spatial variability over time",
+              "legend": {"show": true}
+            }
+          }
+        ],
+        "style": {
+          "grid": {"show": true}
+        }
+      }
+    ]
+  }

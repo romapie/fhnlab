@@ -1,0 +1,499 @@
+{
+    "simulation_info": {
+      "geometry": "torus",
+      "domain_type": "torus_surface"
+    },
+  
+    "global_output": {
+      "save_all": true,
+      "output_directory": "./output/torus_simulation",
+      "file_format": "pdf",
+      "dpi": 300,
+      "transparent": false,
+      "bbox_inches": "tight"
+    },
+  
+    "plots": [
+      {
+        "plot_name": "diffusion_coefficients_3d",
+        "plot_type": "3d_surface",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [1, 2],
+          "figure_size": [16, 7]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "K1", "label": "K₁"}
+            ],
+            "colorbar": {
+              "show": true,
+              "label": "K₁ [cm²/ms]",
+              "limits": [6e-5, 1.4e-4]
+            },
+            "style": {
+              "title": "Diffusion K₁ on torus",
+              "colormap": "hot",
+              "view_angle": {
+                "elevation": 30,
+                "azimuth": 45
+              },
+              "lighting": {
+                "enabled": true,
+                "ambient": 0.4,
+                "diffuse": 0.8
+              }
+            },
+            "overlays": [
+              {
+                "type": "contour_lines",
+                "variable": "K1",
+                "colors": ["red", "yellow", "white"],
+                "levels": 5
+              }
+            ]
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "K2", "label": "K₂"}
+            ],
+            "colorbar": {
+              "show": true,
+              "label": "K₂ [cm²/ms]",
+              "limits": [7e-7, 1.3e-6]
+            },
+            "style": {
+              "title": "Diffusion K₂ on torus",
+              "colormap": "hot",
+              "view_angle": {
+                "elevation": 30,
+                "azimuth": 45
+              },
+              "lighting": {
+                "enabled": true,
+                "ambient": 0.4,
+                "diffuse": 0.8
+              }
+            },
+            "overlays": [
+              {
+                "type": "contour_lines",
+                "variable": "K2",
+                "colors": ["red", "yellow", "white"],
+                "levels": 5
+              }
+            ]
+          }
+        ],
+        "axes": {
+          "x_label": "X",
+          "y_label": "Y",
+          "z_label": "Z",
+          "x_lim": [-7, 7],
+          "y_lim": [-7, 7],
+          "z_lim": [-2.5, 2.5]
+        }
+      },
+  
+      {
+        "plot_name": "v_evolution_3d",
+        "plot_type": "3d_surface",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [2, 3],
+          "figure_size": [18, 12]
+        },
+        "time_snapshots": {
+          "times": [0, 100.1, 200.2, 299.8, 399.9, 495.0],
+          "time_unit": "ms"
+        },
+        "data_sources": [
+          {"variable": "v", "label": "v"}
+        ],
+        "colorbar": {
+          "show": true,
+          "label": "v",
+          "limits": [-0.2, 1.0],
+          "orientation": "vertical"
+        },
+        "style": {
+          "title": "Variable v evolution on torus (spatially_varying diffusion)",
+          "colormap": "RdBu_r",
+          "view_angle": {
+            "elevation": 20,
+            "azimuth": 60
+          },
+          "lighting": {
+            "enabled": true,
+            "ambient": 0.5,
+            "diffuse": 0.7
+          }
+        },
+        "axes": {
+          "x_label": "X",
+          "y_label": "Y",
+          "z_label": "Z",
+          "x_lim": [-7, 7],
+          "y_lim": [-7, 7],
+          "z_lim": [-2.5, 2.5]
+        }
+      },
+  
+      {
+        "plot_name": "v_2d_projection",
+        "plot_type": "heatmap",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [2, 3],
+          "figure_size": [15, 10]
+        },
+        "time_snapshots": {
+          "times": [0, 100.1, 200.2, 299.8, 399.9, 495.0],
+          "time_unit": "ms"
+        },
+        "data_sources": [
+          {"variable": "v", "label": "v"}
+        ],
+        "coordinate_system": "angular",
+        "axes": {
+          "x_label": "φ (toroidal angle)",
+          "y_label": "θ (poloidal angle)",
+          "x_lim": [0, 360],
+          "y_lim": [0, 360],
+          "aspect": "equal"
+        },
+        "colorbar": {
+          "show": true,
+          "label": "v",
+          "limits": [-0.2, 1.0],
+          "orientation": "vertical"
+        },
+        "style": {
+          "title": "Variable v - 2D projection (torus, spatially_varying diffusion)",
+          "colormap": "RdBu_r"
+        }
+      },
+  
+      {
+        "plot_name": "v_w_both_2d_projection",
+        "plot_type": "heatmap",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [6, 2],
+          "figure_size": [12, 18]
+        },
+        "time_snapshots": {
+          "times": [0, 50, 100, 200, 300, 400],
+          "time_unit": "ms"
+        },
+        "coordinate_system": "angular",
+        "subplots": [
+          {
+            "variable": "v",
+            "subplot_indices": [1, 3, 5, 7, 9, 11],
+            "colorbar": {
+              "show": true,
+              "label": "v",
+              "limits": [-0.2, 1.0]
+            },
+            "style": {
+              "colormap": "RdBu_r"
+            }
+          },
+          {
+            "variable": "w",
+            "subplot_indices": [2, 4, 6, 8, 10, 12],
+            "colorbar": {
+              "show": true,
+              "label": "w",
+              "limits": [0.0, 0.16]
+            },
+            "style": {
+              "colormap": "YlGn"
+            }
+          }
+        ],
+        "axes": {
+          "x_label": "φ (toroidal angle)",
+          "y_label": "θ (poloidal angle)",
+          "aspect": "equal"
+        }
+      },
+  
+      {
+        "plot_name": "spacetime_evolution_torus",
+        "plot_type": "heatmap",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [1, 2],
+          "figure_size": [14, 6]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "v", "label": "v"}
+            ],
+            "slice_type": "toroidal_circle",
+            "slice_coordinate": {"theta": 0},
+            "axes": {
+              "x_label": "φ (toroidal angle)",
+              "y_label": "Time (ms)",
+              "x_lim": [0, 360],
+              "y_lim": [0, 500]
+            },
+            "colorbar": {
+              "show": true,
+              "label": "v",
+              "limits": [-0.2, 1.0]
+            },
+            "style": {
+              "title": "v along toroidal circle",
+              "colormap": "RdBu_r"
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "v", "label": "v"}
+            ],
+            "slice_type": "poloidal_circle",
+            "slice_coordinate": {"phi": 0},
+            "axes": {
+              "x_label": "θ (poloidal angle)",
+              "y_label": "Time (ms)",
+              "x_lim": [0, 360],
+              "y_lim": [0, 500]
+            },
+            "colorbar": {
+              "show": true,
+              "label": "v",
+              "limits": [-0.2, 1.0]
+            },
+            "style": {
+              "title": "v along poloidal circle",
+              "colormap": "RdBu_r"
+            }
+          }
+        ],
+        "style": {
+          "title": "Space-time evolution on torus"
+        }
+      },
+  
+      {
+        "plot_name": "phase_portraits_torus",
+        "plot_type": "phase_plane",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [2, 2],
+          "figure_size": [12, 12]
+        },
+        "spatial_locations": [
+          {
+            "coordinates": {"phi": 0, "theta": 0},
+            "label": "Outer, Front",
+            "subplot_index": 1
+          },
+          {
+            "coordinates": {"phi": 180, "theta": 0},
+            "label": "Inner, Front",
+            "subplot_index": 2
+          },
+          {
+            "coordinates": {"phi": 0, "theta": 180},
+            "label": "Outer, Back",
+            "subplot_index": 3
+          },
+          {
+            "coordinates": {"phi": 180, "theta": 180},
+            "label": "Inner, Back",
+            "subplot_index": 4
+          }
+        ],
+        "data_sources": [
+          {"variable": "v_w_trajectory", "color": "blue", "style": "solid", "linewidth": 1.5}
+        ],
+        "overlays": [
+          {
+            "type": "nullcline",
+            "variable": "v",
+            "label": "v-nullcline",
+            "style": {
+              "color": "red",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          },
+          {
+            "type": "nullcline",
+            "variable": "w",
+            "label": "w-nullcline",
+            "style": {
+              "color": "green",
+              "linestyle": "dashed",
+              "linewidth": 2
+            }
+          }
+        ],
+        "axes": {
+          "x_label": "v",
+          "y_label": "w",
+          "x_lim": [-0.2, 1.0],
+          "y_lim": [-0.1, 0.6]
+        },
+        "style": {
+          "title": "Phase portraits on torus",
+          "legend": {
+            "show": true,
+            "location": "upper right"
+          },
+          "grid": {"show": true, "alpha": 0.3}
+        }
+      },
+  
+      {
+        "plot_name": "activity_statistics_torus",
+        "plot_type": "time_series",
+        "geometry": "torus",
+        "layout": {
+          "subplot_grid": [2, 2],
+          "figure_size": [12, 10]
+        },
+        "subplots": [
+          {
+            "subplot_index": 1,
+            "data_sources": [
+              {"variable": "mean_v", "label": "Mean v", "color": "blue", "linewidth": 2},
+              {"variable": "mean_w", "label": "Mean w", "color": "green", "linewidth": 2}
+            ],
+            "axes": {
+              "x_label": "Time (ms)",
+              "y_label": "Mean value",
+              "x_lim": [0, 500]
+            },
+            "style": {
+              "title": "Mean activity over time",
+              "legend": {"show": true}
+            }
+          },
+          {
+            "subplot_index": 2,
+            "data_sources": [
+              {"variable": "std_v", "label": "Std(v)", "color": "blue", "linewidth": 2},
+              {"variable": "std_w", "label": "Std(w)", "color": "green", "linewidth": 2}
+            ],
+            "axes": {
+              "x_label": "Time (ms)",
+              "y_label": "Standard deviation",
+              "x_lim": [0, 500]
+            },
+            "style": {
+              "title": "Spatial variability over time",
+              "legend": {"show": true}
+            }
+          },
+          {
+            "subplot_index": 3,
+            "plot_type": "histogram",
+            "data_sources": [
+              {"variable": "v_final", "color": "blue", "bins": 50}
+            ],
+            "axes": {
+              "x_label": "v value",
+              "y_label": "Count"
+            },
+            "style": {
+              "title": "Distribution of v at final time"
+            }
+          },
+          {
+            "subplot_index": 4,
+            "plot_type": "histogram",
+            "data_sources": [
+              {"variable": "w_final", "color": "green", "bins": 50}
+            ],
+            "axes": {
+              "x_label": "w value",
+              "y_label": "Count"
+            },
+            "style": {
+              "title": "Distribution of w at final time"
+            }
+          }
+        ],
+        "style": {
+          "title": "Activity statistics on torus",
+          "grid": {"show": true}
+        }
+      },
+  
+      {
+        "plot_name": "curvature_analysis_torus",
+        "plot_type": "3d_surface",
+        "geometry": "torus",
+        "data_sources": [
+          {"variable": "gaussian_curvature", "label": "Gaussian Curvature"}
+        ],
+        "colorbar": {
+          "show": true,
+          "label": "Gaussian Curvature",
+          "orientation": "vertical"
+        },
+        "style": {
+          "title": "Gaussian Curvature on Torus",
+          "colormap": "seismic",
+          "view_angle": {
+            "elevation": 30,
+            "azimuth": 45
+          }
+        },
+        "axes": {
+          "x_label": "X",
+          "y_label": "Y",
+          "z_label": "Z"
+        }
+      }
+    ],
+  
+    "animation_configs": [
+      {
+        "animation_name": "rotating_torus_v",
+        "plot_type": "3d_surface",
+        "geometry": "torus",
+        "data_sources": [
+          {"variable": "v", "label": "v"}
+        ],
+        "animation": {
+          "enabled": true,
+          "type": "rotation",
+          "frame_rate": 30,
+          "duration": 10,
+          "loop": true,
+          "azimuth_range": [0, 360],
+          "elevation": 30
+        },
+        "time_point": 200,
+        "colorbar": {
+          "show": true,
+          "label": "v",
+          "limits": [-0.2, 1.0]
+        },
+        "style": {
+          "colormap": "RdBu_r",
+          "lighting": {
+            "enabled": true,
+            "ambient": 0.5,
+            "diffuse": 0.8
+          }
+        },
+        "output": {
+          "file_format": "gif",
+          "dpi": 150
+        }
+      }
+    ]
+  }

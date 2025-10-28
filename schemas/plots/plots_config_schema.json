@@ -1,0 +1,388 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Enhanced plot configuration schema for FHN simulations",
+  "type": "object",
+
+  "properties": {
+    "global_output": {
+      "type": "object",
+      "description": "Default output settings applied to all plots. Can be overridden by individual plot output settings.",
+      "properties": {
+        "save_all": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, save all plots automatically"
+        },
+        "output_directory": {
+          "type": "string",
+          "default": "./output",
+          "description": "Base directory for saving all plots"
+        },
+        "file_format": {
+          "type": "string",
+          "enum": ["png", "pdf", "svg", "eps"],
+          "default": "pdf",
+          "description": "Default file format for all plots"
+        },
+        "dpi": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 600,
+          "default": 300,
+          "description": "Default DPI for all plots"
+        },
+        "transparent": {
+          "type": "boolean",
+          "default": false,
+          "description": "Default transparent background setting"
+        },
+        "bbox_inches": {
+          "type": "string",
+          "enum": ["tight", "standard"],
+          "default": "tight",
+          "description": "Bounding box setting for saved figures"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "plot_name": {
+      "type": "string",
+      "description": "Unique name or ID of the plot configuration"
+    },
+
+    "plot_type": {
+      "type": "string",
+      "enum": [
+        "time_series",
+        "space_profile",
+        "phase_plane",
+        "heatmap",
+        "3d_surface",
+        "histogram",
+        "circular",
+        "correlation",
+        "custom"
+      ],
+      "description": "Type of the plot"
+    },
+
+    "geometry": {
+      "type": "string",
+      "enum": ["1D", "2D", "circle", "torus", "sphere", "3D"],
+      "description": "Spatial geometry of the simulation domain"
+    },
+
+    "layout": {
+      "type": "object",
+      "description": "Layout configuration for subplots",
+      "properties": {
+        "subplot_grid": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[rows, cols] for subplot grid"
+        },
+        "subplot_index": {
+          "type": "integer",
+          "description": "Index of this plot in the grid (1-based)"
+        },
+        "shared_x_axis": {"type": "boolean", "default": false},
+        "shared_y_axis": {"type": "boolean", "default": false},
+        "figure_size": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[width, height] in inches"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "time_snapshots": {
+      "type": "object",
+      "description": "Configuration for time snapshot series",
+      "properties": {
+        "times": {
+          "type": "array",
+          "items": {"type": "number"},
+          "description": "List of time points to snapshot"
+        },
+        "time_unit": {
+          "type": "string",
+          "default": "ms",
+          "description": "Unit of time"
+        },
+        "auto_spacing": {
+          "type": "string",
+          "enum": ["linear", "log", "custom"],
+          "description": "How to space snapshots"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "spatial_locations": {
+      "type": "array",
+      "description": "Specific spatial locations for comparison plots",
+      "items": {
+        "type": "object",
+        "properties": {
+          "coordinates": {
+            "type": "array",
+            "items": {"type": "number"},
+            "description": "Spatial coordinates [x] or [x,y] or [θ,φ]"
+          },
+          "label": {"type": "string"},
+          "marker": {"type": "string"}
+        }
+      }
+    },
+
+    "data_sources": {
+      "type": "array",
+      "description": "List of variables or dataset names to plot",
+      "items": {
+        "type": "object",
+        "properties": {
+          "variable": {
+            "type": "string",
+            "description": "Variable name (e.g., 'v', 'w', 'K1', 'K2')"
+          },
+          "component": {
+            "type": ["string", "null"],
+            "description": "Optional component (e.g., for vector fields)"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label used in legend"
+          },
+          "color": {
+            "type": "string",
+            "description": "Color of the curve or surface"
+          },
+          "style": {
+            "type": "string",
+            "enum": ["solid", "dashed", "dotted", "dashdot"],
+            "description": "Line style"
+          },
+          "linewidth": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Line width"
+          },
+          "marker": {
+            "type": "string",
+            "description": "Marker style for scatter plots"
+          }
+        },
+        "required": ["variable"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+
+    "overlays": {
+      "type": "array",
+      "description": "Additional elements to overlay on the plot",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["nullcline", "trajectory", "annotation", "diffusion_field"],
+            "description": "Type of overlay"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Associated variable (for nullclines)"
+          },
+          "equation": {
+            "type": "string",
+            "description": "Mathematical equation for nullcline"
+          },
+          "style": {
+            "type": "object",
+            "properties": {
+              "color": {"type": "string"},
+              "linestyle": {"type": "string"},
+              "linewidth": {"type": "number"},
+              "alpha": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          },
+          "label": {"type": "string"}
+        },
+        "required": ["type"],
+        "additionalProperties": false
+      }
+    },
+
+    "axes": {
+      "type": "object",
+      "properties": {
+        "x_label": {"type": "string"},
+        "y_label": {"type": "string"},
+        "z_label": {"type": "string"},
+        "x_lim": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "y_lim": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "z_lim": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "x_scale": {
+          "type": "string",
+          "enum": ["linear", "log"],
+          "default": "linear"
+        },
+        "y_scale": {
+          "type": "string",
+          "enum": ["linear", "log"],
+          "default": "linear"
+        },
+        "aspect": {
+          "type": "string",
+          "enum": ["auto", "equal"],
+          "default": "auto",
+          "description": "Aspect ratio of axes"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "colorbar": {
+      "type": "object",
+      "description": "Colorbar settings for heatmaps and 3D plots",
+      "properties": {
+        "show": {"type": "boolean", "default": true},
+        "label": {"type": "string"},
+        "limits": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "[vmin, vmax]"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["vertical", "horizontal"],
+          "default": "vertical"
+        },
+        "ticks": {
+          "type": "array",
+          "items": {"type": "number"},
+          "description": "Custom tick positions"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "style": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "legend": {
+          "type": "object",
+          "properties": {
+            "show": {"type": "boolean", "default": true},
+            "location": {
+              "type": "string",
+              "enum": ["best", "upper right", "upper left", "lower right", "lower left"],
+              "default": "best"
+            },
+            "frameon": {"type": "boolean", "default": true}
+          }
+        },
+        "grid": {
+          "type": "object",
+          "properties": {
+            "show": {"type": "boolean", "default": true},
+            "alpha": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.3},
+            "linestyle": {"type": "string", "default": "--"}
+          }
+        },
+        "colormap": {
+          "type": "string",
+          "description": "Colormap name (e.g., 'viridis', 'coolwarm', 'RdBu')"
+        },
+        "font_size": {
+          "type": "object",
+          "properties": {
+            "title": {"type": "number"},
+            "labels": {"type": "number"},
+            "ticks": {"type": "number"},
+            "legend": {"type": "number"}
+          }
+        },
+        "background_alpha": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Transparency of plot background for overlays"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "animation": {
+      "type": "object",
+      "description": "Settings for animated plots",
+      "properties": {
+        "enabled": {"type": "boolean", "default": false},
+        "frame_rate": {"type": "number", "default": 10},
+        "duration": {"type": "number", "description": "Total duration in seconds"},
+        "loop": {"type": "boolean", "default": true}
+      },
+      "additionalProperties": false
+    },
+
+    "output": {
+      "type": "object",
+      "description": "Optional output settings that override global_output for this specific plot. Priority: plot-specific output > global_output > defaults.",
+      "properties": {
+        "save": {
+          "type": "boolean",
+          "description": "Override save setting for this plot (overrides global_output.save_all)"
+        },
+        "file_name": {
+          "type": "string",
+          "description": "Custom filename (without extension). If not specified, uses plot_name."
+        },
+        "file_format": {
+          "type": "string",
+          "enum": ["png", "pdf", "svg", "eps", "gif"],
+          "description": "Override global file format for this plot"
+        },
+        "dpi": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 600,
+          "description": "Override global DPI for this plot"
+        },
+        "transparent": {
+          "type": "boolean",
+          "description": "Override global transparent background setting"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "required": ["plot_name", "plot_type", "data_sources"],
+  
+  "description": "Plot configuration object. Uses global_output settings unless overridden by plot-specific output property.",
+  "additionalProperties": false
+}
