@@ -1,7 +1,9 @@
 import json
+import jsonschema
 
 from pathlib import Path
 from typing import Dict
+from jsonschema import validate, ValidationError
 
 class ConfigurationManager:
     """
@@ -71,12 +73,41 @@ class ConfigurationManager:
             return json.load(file)
 
 
-    def _validate_config(self) -> None:
-        pass
+    def _validate_config(self, config_data: Dict, schema_data: Dict) -> bool:
+        """
+        Validate a configuration dictionary against a JSON schema.
+        
+        Args:
+            config_data (dict): Loaded configuration JSON.
+            schema_data (dict): Corresponding JSON schema.
+            
+        Returns:
+            bool: True if validation passes, raises ValidationError otherwise.
+        """
+
+        try:
+            validate(instance=config_data, schema=schema_data):
+            return True
+        except ValidationError as e:
+            raise ValueError(f"Configuration validation failed: {e.message}\nPath: {list(e.path)}")
 
 
-    def load_and_validate(self) -> None:
-        pass
+    def load_and_validate(self, config_name: str, schema_name: str) -> Dict:
+        """
+        Load and validate a configuration file against a given schema.
+        
+        Args:
+            config_name (str): Configuration file name (e.g. 'experiment_config.json').
+            schema_name (str): Schema file name (e.g. 'experiment_schema.json').
+            
+        Returns:
+            dict: Validated configuration data.
+        """
+
+        config_data = self._load_config(config_name)
+        schema_data = self._load_schema(schema_name)
+        
+        self._validate_config(config_data, schema_data)
 
 
     def save_config(self) -> None:
