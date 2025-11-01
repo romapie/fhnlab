@@ -1,8 +1,9 @@
 import json
 import jsonschema
+import os
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 from jsonschema import validate, ValidationError
 
 class ConfigurationManager:
@@ -86,7 +87,7 @@ class ConfigurationManager:
         """
 
         try:
-            validate(instance=config_data, schema=schema_data):
+            validate(instance=config_data, schema=schema_data)
             return True
         except ValidationError as e:
             raise ValueError(f"Configuration validation failed: {e.message}\nPath: {list(e.path)}")
@@ -110,16 +111,73 @@ class ConfigurationManager:
         self._validate_config(config_data, schema_data)
 
 
-    def save_config(self) -> None:
-        pass
+    def save_config(self, config_name: str, data: Dict, overwrite: bool = False) -> None:
+        """
+        Save a configuration to a JSON file.
+        
+        Args:
+            config_name (str): Name of the configuration file.
+            data (dict): Configuration data to save.
+            overwrite (bool): Whether to overwrite existing file (default: False).
+        """
+
+        path = os.path.join(self.config_dir, config_name)
+
+        if os.path.exists(path) and not overwrite:
+            raise FileExistsError(f"Configuration file '{config_name}' already exists.")
+        
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=2, ensure_ascii=False)
+
+    
+    def update_config(self, config_name: str, updates: Dict) -> None:
+        """
+        Update existing configuration file with new key-value pairs.
+        
+        Args:
+            config_name (str): Name of the configuration file.
+            updates (dict): Dictionary of values to update.
+        """
+
+        data = self._load_config(config_name)
+        data.update(updates)
+        self.save_config(config_name, data, overwrite=True)
 
 
-    def list_schemas(self) -> None:
-        pass
+    def list_schemas(self) -> List[str]:
+        """
+        List all configuration schema files available in the schemas directory.
+        
+        Returns:
+            list: List of config schemas file names.
+        """
+
+        return [ file for file in os.listdir(self.schema_dir) if file.endswith(".json") ]
 
 
-    def list_configs(self) -> None:
-        pass
+    def list_configs(self) -> List[str]:
+        """
+        List all configuration files available in the config directory.
+        
+        Returns:
+            list: List of config file names.
+        """
+
+        return [ file for file in os.listdir(self.config_dir) if file.endswith(".json") ]
+    
+
+    def get_config(self, config_name: str) -> Dict:
+        """
+        Return a loaded configuration dictionary without validation.
+        
+        Args:
+            config_name (str): Configuration file name.
+            
+        Returns:
+            dict: Loaded configuration.
+        """
+
+        return self._load_config(config_name)
 
 
     def create_timestamp(self) -> None:
