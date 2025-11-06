@@ -3,7 +3,7 @@ import jsonschema
 import os
 
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Any
 from jsonschema import validate, ValidationError
 
 class ConfigurationManager:
@@ -178,6 +178,90 @@ class ConfigurationManager:
         """
 
         return self._load_config(config_name)
+    
+
+    def get_experiment_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate experiment configuration file.
+        
+        Args:
+            filename (str): Path to the experiment configuration file.
+            
+        Returns:
+            dict: Validated experiment configuration.
+        """
+
+        return self.load_and_validate(filename, "experiment_schema.json")
+    
+
+    def get_database_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate database configuration file.
+        
+        Args:
+            filename (str): Path to the database configuration file.
+            
+        Returns:
+            dict: Validated database configuration.
+        """
+
+        return self.load_and_validate(filename, "database_schema.json")
+    
+
+    def get_logging_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate logging configuration file.
+        
+        Args:
+            filename (str): Path to the logging configuration file.
+            
+        Returns:
+            dict: Validated logging configuration.
+        """
+
+        return self.load_and_validate(filename, "logging_schema.json")
+    
+
+    def get_model_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate model configuration file.
+        
+        Args:
+            filename (str): Path to the model configuration file.
+        
+        Returns:
+            dict: Validated model configuration.
+        """
+
+        return self.load_and_validate(filename, "model_schema.json")
+    
+
+    def get_solver_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate solver configuration file.
+
+        Args:
+            filename (str): Path to the solver configuration file.
+
+        Returns:
+            dict: Validated solver configuration.  
+        """
+
+        return self.load_and_validate(filename, "solver_schema.json")
+    
+
+    def get_plot_config(self, filename: str) -> Dict[str, Any]:
+        """
+        Load and validate plot configuration file.
+        
+        Args:   
+            filename (str): Path to the plot configuration file.
+            
+        Returns:
+            dict: Validated plot configuration.
+        """
+
+        return self.load_and_validate(filename, "plot_schema.json")
 
 
     def create_timestamp(self) -> None:
