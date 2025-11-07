@@ -1,0 +1,50 @@
+# === Python basics ===
+__pycache__/
+*.py[cod]
+*$py.class
+
+# === Virtual environments ===
+.venv/
+venv/
+env/
+ENV/
+.venv*/
+*.env
+
+# === Build & distribution ===
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# === Testing ===
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# === Logs and temporary files ===
+*.log
+*.tmp
+*.bak
+*.swp
+
+# === Jupyter notebooks checkpoints ===
+.ipynb_checkpoints
+
+# === IDE / Editor settings ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Poetry & setuptools ===
+.poetry-cache/
+.pyproject.toml.lock
