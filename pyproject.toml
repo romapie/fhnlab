@@ -1,24 +1,41 @@
-[project]
+[tool.poetry]
 name = "fhnlab"
 version = "0.1.0"
-description = "-"
-authors = [
-    {name = "romapie",email = "139781658+romapie@users.noreply.github.com"}
-]
+description = "FitzHugh-Nagumo Laboratory CLI"
+authors = ["romapie <139781658+romapie@users.noreply.github.com>"]
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "click (>=8.3.0,<9.0.0)",
-    "numpy (>=2.3.3,<3.0.0)",
-    "matplotlib (>=3.10.7,<4.0.0)",
-    "scipy (>=1.16.2,<2.0.0)",
-    "sympy (>=1.14.0,<2.0.0)",
-    "jsonschema (>=4.25.1,<5.0.0)",
-    "pytest (>=8.4.2,<9.0.0)",
-    "pytest-cov (>=7.0.0,<8.0.0)"
-]
+license = "MIT"
+
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+click = ">=8.3.0,<9.0.0"
+numpy = ">=2.3.3,<3.0.0"
+matplotlib = ">=3.10.7,<4.0.0"
+scipy = ">=1.16.2,<2.0.0"
+sympy = ">=1.14.0,<2.0.0"
+jsonschema = ">=4.25.1,<5.0.0"
+pytest = ">=8.4.2,<9.0.0"
+pytest-cov = ">=7.0.0,<8.0.0"
+paramiko = ">=4.0.0,<5.0.0"
+scp = ">=0.15.0,<0.16.0"
+pyyaml = ">=6.0.3,<7.0.0"
+rich = ">=14.2.0,<15.0.0"
+tqdm = ">=4.67.1,<5.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+flake8 = "*"
+mypy = "*"
+pre-commit = "*"
+ipython = "*"
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+fhnlab = "fhnlab.cli:cli"
