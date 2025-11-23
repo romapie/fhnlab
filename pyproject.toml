@@ -5,6 +5,9 @@ description = "FitzHugh-Nagumo Laboratory CLI"
 authors = ["romapie <139781658+romapie@users.noreply.github.com>"]
 readme = "README.md"
 license = "MIT"
+packages = [
+    { include = "fhnlab" }
+]
 
 
 [tool.poetry.dependencies]
