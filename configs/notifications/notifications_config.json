@@ -1,0 +1,10 @@
+{
+    "email": {
+      "smtp_host": "...",
+      "smtp_port": 465,
+      "user": "...",
+      "password": "...",
+      "to": "..."
+    }    
+}
+  
