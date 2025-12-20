@@ -4,6 +4,8 @@ import json
 import subprocess
 import shutil
 import time
+import threading
+import psutil
 
 from dataclasses import dataclass, asdict
 from datetime import datetime
@@ -14,6 +16,8 @@ from fhnlab.core.cluster.config import ClusterConfig  # type: ignore
 from fhnlab.core.cluster.manager import ClusterManager  # type: ignore
 from fhnlab.core.cluster.slurm import SlurmManager  # type: ignore
 from fhnlab.core.notification_manager import NotificationManager  # type: ignore
+from fhnlab.core.database.database_manager import DatabaseManager
+from fhnlab.core.database.enums import ExperimentStatus, LogLevel
 
 
 @dataclass
@@ -37,6 +41,8 @@ class ExperimentOrchestrator:
 
     def __init__(
         self,
+        database_url: str,
+        solver,
         base_dir: Path,
         cluster_manager: Optional[ClusterManager] = None,
         slurm_manager: Optional[SlurmManager] = None,
@@ -58,6 +64,8 @@ class ExperimentOrchestrator:
         self.notifier = notifier
         self.local_solver_cmd = local_solver_cmd
         self.base_dir.mkdir(parents=True, exist_ok=True)
+        self.db = DatabaseManager(database_url)
+        self.solver = solver
 
         # sensible defaults for decision logic if none provided
         self.thresholds = auto_cluster_thresholds or {
@@ -71,9 +79,13 @@ class ExperimentOrchestrator:
     # -------------------------
     def create_experiment(
         self,
+        name: str,
         experiment_id: str,
+        geometry_type,
         geometry: Dict[str, Any],
         params: Dict[str, Any],
+        tags: list[str],
+        target,
         job_template_render: Optional[str] = None,
     ) -> Path:
         """
@@ -85,6 +97,21 @@ class ExperimentOrchestrator:
         :param job_template_render: optional string content of SLURM script (if available)
         :return: path to experiment directory
         """
+
+        exp = self.db.create_experiment(
+            name=name,
+            geometry=geometry_type,
+            geometry=geometry,
+            parameters=params,
+            tags=tags,
+            target=target,
+        )
+
+        self.db.log_experiment(
+            exp.id,
+            LogLevel.INFO,
+            "Experiment created",
+        )
 
         exp_dir = self.base_dir / experiment_id
         exp_dir.mkdir(parents=True, exist_ok=True)
@@ -113,7 +140,46 @@ class ExperimentOrchestrator:
         if self.notifier:
             self.notifier.notify_all(f"Experiment {experiment_id} created at {exp_dir}")
 
-        return exp_dir
+        return exp_dir and exp
+
+    def solve_experiment(self, exp):
+        self.db.update_experiment_status(exp.id, ExperimentStatus.RUNNING)
+
+        self.db.log_experiment(
+            exp.id,
+            LogLevel.INFO,
+            "Experiment started",
+        )
+
+        try:
+            self._run_solver(exp)
+
+            self.db.update_experiment_status(
+                exp.id,
+                ExperimentStatus.COMPLETED,
+            )
+
+            self.db.log_experiment(
+                exp.id,
+                LogLevel.INFO,
+                "Experiment completed successfully",
+            )
+        except Exception as e:
+            self.db.update_experiment_status(
+                exp.id,
+                ExperimentStatus.FAILED,
+            )
+
+            self.db.log_experiment(
+                exp.id,
+                LogLevel.ERROR,
+                f"Experiment failed: {e}",
+            )
+
+            if self.notifier:
+                self.notifier.error(str(e))
+
+            raise
 
     # ---------------------------
     # estimate_computational_cost
@@ -465,3 +531,34 @@ class ExperimentOrchestrator:
             "cost": cost,
             **result,
         }
+
+    def start_performance_monitor(self, exp_id, interval=2):
+        self._perf_running = True
+
+        def monitor():
+            while self._perf_running:
+                cpu = psutil.cpu_percent()
+                mem = psutil.virtual_memory().used / 1024 / 1024
+
+                self.db.add_performance_metric(
+                    exp_id,
+                    cpu_percent=cpu,
+                    memory_mb=mem,
+                )
+                time.sleep(interval)
+
+        t = threading.Thread(target=monitor, daemon=True)
+        t.start()
+
+    def save_snapshot(self, exp, step, file_path):
+        self.db.add_snapshot(
+            experiment_id=exp.id,
+            step=step,
+            file_path=file_path,
+        )
+
+        self.db.log_experiment(
+            exp.id,
+            LogLevel.INFO,
+            f"Snapshot saved at step {step}",
+        )
