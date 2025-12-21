@@ -4,6 +4,7 @@ from rich.console import Console
 
 from fhnlab.cli.commands.cluster import cluster
 from fhnlab.cli.commands.config import config
+from fhnlab.cli.commands.create import create
 from fhnlab.cli.commands.experiment import experiment
 from fhnlab.cli.commands.info import info
 from fhnlab.cli.commands.solve import solve
@@ -66,6 +67,7 @@ def cli(ctx, verbose, configs_dir, data_dir):
 
 cli.add_command(cluster)
 cli.add_command(config)
+cli.add_command(create)
 cli.add_command(experiment)
 cli.add_command(info)
 cli.add_command(solve)
