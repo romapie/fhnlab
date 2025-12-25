@@ -2,6 +2,7 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "title": "Database Configuration Schema",
     "type": "object",
+    "required": ["db_type", "db_path", "tables"],
     "properties": {
       "db_type": {
         "type": "string",
@@ -14,57 +15,76 @@
       },
       "tables": {
         "type": "object",
+        "required": ["experiments", "logs"],
         "properties": {
           "experiments": {
             "type": "object",
+            "required": ["columns"],
             "properties": {
               "columns": {
                 "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "model_name",
+                  "model_type",
+                  "geometry",
+                  "solver_type",
+                  "execution_backend",
+                  "status",
+                  "config_path",
+                  "created_time",
+                  "start_time",
+                  "end_time",
+                  "input_path",
+                  "output_path",
+                  "error_message"
+                ],
                 "properties": {
                   "id": { "type": "string" },
+                  "name": { "type": "string" },
                   "model_name": { "type": "string" },
+                  "model_type": { "type": "string" },
+                  "geometry": { "type": "string" },
                   "solver_type": { "type": "string" },
+                  "execution_backend": { "type": "string" },
+                  "status": { "type": "string" },
+                  "config_path": { "type": "string" },
                   "created_time": { "type": "string", "format": "date-time" },
                   "start_time": { "type": "string", "format": "date-time" },
                   "end_time": { "type": "string", "format": "date-time" },
-                  "status": { "type": "string" },
                   "input_path": { "type": "string" },
                   "output_path": { "type": "string" },
-                  "host": { "type": "string" },
-                  "message": { "type": "string" }
-                },
-                "required": [
-                  "id",
-                  "model_name",
-                  "status",
-                  "created_time",
-                  "start_time"
-                ]
+                  "error_message": { "type": "string" }
+                }
               }
-            },
-            "required": ["columns"]
+            }
           },
           "logs": {
             "type": "object",
+            "required": ["columns"],
             "properties": {
               "columns": {
                 "type": "object",
+                "required": [
+                  "id",
+                  "experiment_id",
+                  "timestamp",
+                  "level",
+                  "message"
+                ],
                 "properties": {
                   "id": { "type": "string" },
-                  "experiment_id": { "type": "integer" },
+                  "experiment_id": { "type": "string" },
                   "timestamp": { "type": "string", "format": "date-time" },
                   "level": { "type": "string" },
                   "message": { "type": "string" }
-                },
-                "required": ["id", "timestamp", "level", "message"]
+                }
               }
-            },
-            "required": ["columns"]
+            }
           }
-        },
-        "required": ["experiments"]
+        }
       }
-    },
-    "required": ["db_type", "db_path", "tables"]
+    }
   }
   

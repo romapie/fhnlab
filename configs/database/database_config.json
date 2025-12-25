@@ -1,28 +1,32 @@
 {
     "db_type": "sqlite",
-    "db_path": "data/experiments.db",
+    "db_path": "data/fhnlab_meta_info.db",
   
     "tables": {
       "experiments": {
         "columns": {
           "id": "TEXT PRIMARY KEY",
+          "name": "TEXT NOT NULL",
           "model_name": "TEXT NOT NULL",
-          "solver_type": "TEXT",
+          "model_type": "TEXT NOT NULL",
+          "geometry": "TEXT",
+          "solver_type": "TEXT NOT NULL",
+          "execution_backend": "TEXT NOT NULL",
+          "status": "TEXT NOT NULL",
+          "config_path": "TEXT NOT NULL",
           "created_time": "DATETIME DEFAULT CURRENT_TIMESTAMP",
           "start_time": "DATETIME",
           "end_time": "DATETIME",
-          "status": "TEXT",
           "input_path": "TEXT",
           "output_path": "TEXT",
-          "host": "TEXT",
-          "message": "TEXT"
+          "error_message": "TEXT"
         }
       },
   
       "logs": {
         "columns": {
           "id": "TEXT PRIMARY KEY",
-          "experiment_id": "INTEGER",
+          "experiment_id": "TEXT NOT NULL",
           "timestamp": "DATETIME DEFAULT CURRENT_TIMESTAMP",
           "level": "TEXT",
           "message": "TEXT"
