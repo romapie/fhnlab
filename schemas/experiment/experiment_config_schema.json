@@ -3,56 +3,82 @@
   "title": "Experiment configuration schema",
   "type": "object",
 
+  "required": [
+    "experiment_name",
+    "model_config",
+    "solver_config",
+    "output_path"
+  ],
+
   "properties": {
     "experiment_name": {
-      "type": "string",
-      "description": "Unique name for the experiment"
+      "type": "string"
     },
+
     "description": {
-      "type": "string",
-      "description": "Optional description of the experiment"
+      "type": "string"
     },
-    "timestamp": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Start time of the experiment (auto-generated if missing)"
-    },
+
     "model_config": {
-      "type": "string",
-      "description": "Path or ID of model configuration JSON"
+      "type": "string"
     },
+
     "solver_config": {
-      "type": "string",
-      "description": "Path or ID of solver configuration JSON"
+      "type": "string"
     },
+
     "plot_configs": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "List of plot configuration JSON files or IDs"
+      "items": { "type": "string" }
     },
+
     "logging_config": {
-      "type": "string",
-      "description": "Path or ID of logging configuration JSON"
+      "type": "string"
     },
+
+    "execution": {
+      "type": "object",
+      "required": ["backend"],
+      "properties": {
+        "backend": {
+          "type": "string",
+          "enum": ["local", "remote"]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "output_path": {
+      "type": "string"
+    },
+
     "repetitions": {
       "type": "integer",
       "minimum": 1,
-      "default": 1,
-      "description": "Number of repeated runs"
+      "default": 1
     },
+
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "notes": {
+      "type": "string"
+    },
+
     "parameter_sweep": {
       "type": "object",
       "patternProperties": {
         "^[A-Za-z_][A-Za-z0-9_]*$": {
           "type": "array",
           "items": { "type": "number" },
-          "description": "List of values to sweep for this parameter"
+          "minItems": 1
         }
       },
       "additionalProperties": false
     }
   },
 
-  "required": ["experiment_name", "model_config", "solver_config"],
   "additionalProperties": false
 }

@@ -8,6 +8,9 @@
       "configs/plots/w_space_profile.json"
     ],
     "logging_config": "configs/logging/log_config.json",
+    "execution": {
+      "backend": "auto"
+    },
     "output_path": "results/fhn_experiment_1",
     "repetitions": 3,
     "tags": ["reaction_diffusion", "FHN", "1D", "parameter_sweep"],
