@@ -1,109 +1,114 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Logging Configuration Schema",
-    "type": "object",
-    "properties": {
-      "version": {
-        "type": "integer",
-        "const": 1,
-        "description": "Version of the logging configuration format"
-      },
-      "level": {
-        "type": "string",
-        "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        "description": "Root logging level"
-      },
-      "formatters": {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Logging Configuration Schema",
+  "type": "object",
+
+  "required": ["version", "formatters", "handlers", "root"],
+
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Logging configuration format version"
+    },
+
+    "formatters": {
+      "type": "object",
+      "description": "Formatter definitions",
+      "additionalProperties": {
         "type": "object",
-        "description": "Logging output formatters",
+        "required": ["format"],
         "properties": {
-          "standard": {
-            "type": "object",
-            "properties": {
-              "format": { "type": "string" },
-              "datefmt": { "type": "string" }
-            },
-            "required": ["format"]
-          }
-        }
-      },
-      "handlers": {
-        "type": "object",
-        "description": "Handlers define where logs are written",
-        "properties": {
-          "console": {
-            "type": "object",
-            "properties": {
-              "class": { "type": "string", "const": "logging.StreamHandler" },
-              "level": {
-                "type": "string",
-                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-              },
-              "formatter": { "type": "string" }
-            },
-            "required": ["class", "level", "formatter"]
+          "format": {
+            "type": "string"
           },
-          "file": {
-            "type": "object",
-            "properties": {
-              "class": { "type": "string", "const": "logging.FileHandler" },
-              "level": {
-                "type": "string",
-                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-              },
-              "formatter": { "type": "string" },
-              "filename": { "type": "string" },
-              "mode": {
-                "type": "string",
-                "enum": ["a", "w"],
-                "default": "a"
-              }
-            },
-            "required": ["class", "level", "formatter", "filename"]
-          },
-          "database": {
-            "type": "object",
-            "properties": {
-              "class": {
-                "type": "string",
-                "const": "custom.DatabaseHandler"
-              },
-              "level": {
-                "type": "string",
-                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-              },
-              "formatter": { "type": "string" },
-              "table": { "type": "string" }
-            },
-            "required": ["class", "level", "formatter"]
+          "datefmt": {
+            "type": "string"
           }
-        }
-      },
-      "loggers": {
-        "type": "object",
-        "description": "Defines loggers for different modules",
-        "patternProperties": {
-          "^[a-zA-Z0-9_.-]+$": {
-            "type": "object",
-            "properties": {
-              "level": {
-                "type": "string",
-                "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-              },
-              "handlers": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": ["console", "file", "database"]
-                }
-              },
-              "propagate": { "type": "boolean" }
-            },
-            "required": ["level", "handlers"]
-          }
-        }
+        },
+        "additionalProperties": false
       }
     },
-    "required": ["version", "level", "formatters", "handlers", "loggers"]
-  }
-    
+
+    "handlers": {
+      "type": "object",
+      "description": "Handler definitions",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["class", "level", "formatter"],
+        "properties": {
+          "class": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+          },
+          "formatter": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["a", "w"]
+          },
+          "table": {
+            "type": "string"
+          },
+          "include_experiment_context": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "root": {
+      "type": "object",
+      "description": "Root logger configuration",
+      "required": ["level", "handlers"],
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "loggers": {
+      "type": "object",
+      "description": "Named logger configurations",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["level", "handlers"],
+        "properties": {
+          "level": {
+            "type": "string",
+            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+          },
+          "handlers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "propagate": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+
+  "additionalProperties": false
+}
