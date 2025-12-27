@@ -1,0 +1,91 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "GUI configuration schema",
+    "type": "object",
+    "required": ["application", "views", "sections"],
+  
+    "properties": {
+      "application": {
+        "type": "object",
+        "required": ["name", "version"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "theme": {
+            "type": "string",
+            "enum": ["light", "dark"]
+          },
+          "window": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "integer", "minimum": 400 },
+              "height": { "type": "integer", "minimum": 300 },
+              "resizable": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+  
+      "views": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["title", "sections"],
+          "properties": {
+            "title": { "type": "string" },
+            "sections": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      },
+  
+      "sections": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "required": ["label", "fields"],
+          "properties": {
+            "label": { "type": "string" },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "label", "type"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "label": { "type": "string" },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "multiline",
+                      "number",
+                      "select",
+                      "checkbox",
+                      "path",
+                      "list",
+                      "readonly"
+                    ]
+                  },
+                  "required": { "type": "boolean" },
+                  "options": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+  
+    "additionalProperties": false
+  }
+  

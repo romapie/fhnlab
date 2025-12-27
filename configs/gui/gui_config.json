@@ -1,0 +1,62 @@
+{
+    "application": {
+      "name": "FHNLab",
+      "version": "0.1.0",
+      "theme": "light",
+      "window": {
+        "width": 1200,
+        "height": 800,
+        "resizable": true
+      }
+    },
+  
+    "views": {
+      "experiment_editor": {
+        "title": "Experiment Configuration",
+        "sections": [
+          "general",
+          "model",
+          "solver",
+          "execution",
+          "visualization"
+        ]
+      }
+    },
+  
+    "sections": {
+      "general": {
+        "label": "General",
+        "fields": [
+          {
+            "name": "experiment_name",
+            "label": "Experiment name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "description",
+            "label": "Description",
+            "type": "multiline"
+          },
+          {
+            "name": "output_path",
+            "label": "Output directory",
+            "type": "path"
+          }
+        ]
+      },
+  
+      "execution": {
+        "label": "Execution",
+        "fields": [
+          {
+            "name": "execution.backend",
+            "label": "Execution backend",
+            "type": "select",
+            "options": ["local", "remote"]
+          }
+        ]
+      }
+    }
+  }
+  
