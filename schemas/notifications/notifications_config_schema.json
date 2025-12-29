@@ -1,6 +1,70 @@
 {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Notification Configuration Schema",
     "type": "object",
+  
+    "required": ["enabled"],
+  
     "properties": {
-        "email": {"type": "object"}
-    }
-}
+      "enabled": {
+        "type": "boolean",
+        "description": "Enable or disable all notifications"
+      },
+  
+      "email": {
+        "type": "object",
+        "required": ["enabled", "smtp_host", "smtp_port", "user", "password", "to"],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable email notifications"
+          },
+          "smtp_host": {
+            "type": "string"
+          },
+          "smtp_port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "use_ssl": {
+            "type": "boolean",
+            "default": true
+          },
+          "user": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "minItems": 1
+          },
+          "on_events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EXPERIMENT_CREATED",
+                "EXPERIMENT_STARTED",
+                "EXPERIMENT_FINISHED",
+                "EXPERIMENT_FAILED"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+  
+    "additionalProperties": false
+  }
+  
