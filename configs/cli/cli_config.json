@@ -1,0 +1,27 @@
+{
+    "app_name": "fhnlab",
+    "version_check": true,
+  
+    "verbosity": "debug",
+    "use_colors": true,
+    "show_progress": true,
+  
+    "interactive": true,
+    "confirm_destructive_actions": true,
+  
+    "default_profile": "dev",
+    "default_experiments_path": "fhnlab/experiments",
+    "default_configs_path": "fhnlab/configs",
+  
+    "output": {
+      "format": "yaml",
+      "float_precision": 10,
+      "truncate_long_values": true
+    },
+  
+    "errors": {
+      "show_traceback": true,
+      "suggest_fixes": true
+    }
+  }
+  
