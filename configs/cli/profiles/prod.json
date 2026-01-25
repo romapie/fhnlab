@@ -1,0 +1,25 @@
+{
+    "description": "Production profile for batch and cluster execution",
+  
+    "database": "configs/database/database_config.json",
+    "logging": "configs/logging/logging_config.json",
+    "notifications": "configs/notifications/notifications_config.json",
+  
+    "cluster": "configs/cluster/cluster_config.json",
+  
+    "event_bus": "configs/event_bus/event_lifecycle_config.json",
+  
+    "runtime": {
+      "mode": "batch",
+      "max_workers": 8,
+      "dry_run": false
+    },
+  
+    "cli_overrides": {
+      "interactive": false,
+      "verbosity": "warning",
+      "show_progress": false,
+      "use_colors": false
+    }
+  }
+  

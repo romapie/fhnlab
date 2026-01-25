@@ -1,0 +1,25 @@
+{
+    "description": "Development profile with verbose logging and diagnostics",
+  
+    "database": "configs/database/database_config.json",
+    "logging": "configs/logging/logging_config.json",
+    "notifications": "configs/notifications/notifications_config.json",
+  
+    "cluster": null,
+  
+    "event_bus": "configs/event_bus/event_lifecycle_config.json",
+  
+    "runtime": {
+      "mode": "local",
+      "max_workers": 1,
+      "dry_run": false,
+      "debug": true
+    },
+  
+    "cli_overrides": {
+      "verbosity": "debug",
+      "show_traceback": true,
+      "confirm_destructive_actions": false
+    }
+  }
+  

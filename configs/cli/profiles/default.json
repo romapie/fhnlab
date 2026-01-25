@@ -1,0 +1,18 @@
+{
+    "description": "Default local profile for interactive CLI usage",
+  
+    "database": "configs/database/database_config.json",
+    "logging": "configs/logging/logging_config.json",
+    "notifications": "configs/notifications/notifications_config.json",
+  
+    "cluster": null,
+  
+    "event_bus": "configs/event_bus/event_lifecycle_config.json",
+  
+    "runtime": {
+      "mode": "local",
+      "max_workers": 1,
+      "dry_run": false
+    }
+  }
+  
