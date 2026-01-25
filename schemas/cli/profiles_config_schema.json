@@ -1,0 +1,119 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Execution Profile Schema",
+    "description": "Schema for validating execution profiles used by the CLI to assemble runtime configuration.",
+  
+    "type": "object",
+    "additionalProperties": false,
+  
+    "properties": {
+      "description": {
+        "type": "string",
+        "description": "Human-readable description of the execution profile.",
+        "minLength": 1
+      },
+  
+      "database": {
+        "type": "string",
+        "description": "Path to database configuration file.",
+        "minLength": 1
+      },
+  
+      "logging": {
+        "type": "string",
+        "description": "Path to logging configuration file.",
+        "minLength": 1
+      },
+  
+      "notifications": {
+        "type": "string",
+        "description": "Path to notifications configuration file.",
+        "minLength": 1
+      },
+  
+      "cluster": {
+        "description": "Path to cluster configuration file or null for local execution.",
+        "anyOf": [
+          { "type": "null" },
+          { "type": "string", "minLength": 1 }
+        ]
+      },
+  
+      "event_bus": {
+        "type": "string",
+        "description": "Path to event lifecycle configuration file.",
+        "minLength": 1
+      },
+  
+      "runtime": {
+        "type": "object",
+        "description": "Runtime execution parameters.",
+        "additionalProperties": false,
+  
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["local", "batch"],
+            "description": "Execution mode of the application."
+          },
+  
+          "max_workers": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of parallel workers."
+          },
+  
+          "dry_run": {
+            "type": "boolean",
+            "description": "Whether to run the application in dry-run mode."
+          },
+  
+          "debug": {
+            "type": "boolean",
+            "description": "Enable additional runtime debugging features."
+          }
+        },
+  
+        "required": ["mode", "max_workers", "dry_run"]
+      },
+  
+      "cli_overrides": {
+        "type": "object",
+        "description": "Overrides applied to the base CLI configuration.",
+        "additionalProperties": false,
+  
+        "properties": {
+          "verbosity": {
+            "type": "string",
+            "enum": ["debug", "info", "warning", "error"]
+          },
+          "interactive": {
+            "type": "boolean"
+          },
+          "show_progress": {
+            "type": "boolean"
+          },
+          "use_colors": {
+            "type": "boolean"
+          },
+          "show_traceback": {
+            "type": "boolean"
+          },
+          "confirm_destructive_actions": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+  
+    "required": [
+      "description",
+      "database",
+      "logging",
+      "notifications",
+      "cluster",
+      "event_bus",
+      "runtime"
+    ]
+  }
+  
