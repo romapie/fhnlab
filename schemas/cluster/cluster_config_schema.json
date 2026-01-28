@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cluster Configuration Schema",
+  "description": "Schema for validating cluster and execution backend configuration.",
+
+  "type": "object",
+  "additionalProperties": false,
+
+  "properties": {
+    "backend": {
+      "type": "string",
+      "description": "Execution backend used to run computational jobs.",
+      "enum": ["local", "slurm", "ssh", "kubernetes"]
+    },
+
+    "execution": {
+      "type": "object",
+      "description": "Execution control parameters.",
+      "additionalProperties": false,
+
+      "properties": {
+        "max_workers": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of parallel workers or jobs."
+        },
+
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum allowed execution time for a job in seconds."
+        },
+
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of retries allowed after a job failure."
+        }
+      },
+
+      "required": ["max_workers", "timeout_seconds", "retry_count"]
+    },
+
+    "resources": {
+      "type": "object",
+      "description": "Resource requirements for a single job.",
+      "additionalProperties": false,
+
+      "properties": {
+        "cpu_cores": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of CPU cores required."
+        },
+
+        "memory_gb": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Amount of memory required in gigabytes."
+        }
+      },
+
+      "required": ["cpu_cores", "memory_gb"]
+    },
+
+    "logging": {
+      "type": "object",
+      "description": "Logging configuration for cluster execution layer.",
+      "additionalProperties": false,
+
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR"],
+          "description": "Logging level for cluster operations."
+        }
+      },
+
+      "required": ["level"]
+    }
+  },
+
+  "required": ["backend", "execution", "resources", "logging"]
+}

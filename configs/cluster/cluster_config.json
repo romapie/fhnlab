@@ -1,0 +1,19 @@
+{
+    "backend": "local",
+  
+    "execution": {
+      "max_workers": 4,
+      "timeout_seconds": 36000,
+      "retry_count": 3
+    },
+  
+    "resources": {
+      "cpu_cores": 8,
+      "memory_gb": 16
+    },
+  
+    "logging": {
+      "level": "INFO"
+    }
+  }
+  
