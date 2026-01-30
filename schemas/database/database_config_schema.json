@@ -1,85 +1,106 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema#",
-    "title": "Database Configuration Schema",
-    "type": "object",
-    "required": ["db_type", "db_path", "tables"],
-    "properties": {
-      "db_type": {
-        "type": "string",
-        "enum": ["sqlite", "postgresql", "mysql"],
-        "description": "Type of the database backend"
-      },
-      "db_path": {
-        "type": "string",
-        "description": "Path to database file or connection string"
-      },
-      "tables": {
-        "type": "object",
-        "required": ["experiments", "logs"],
-        "properties": {
-          "experiments": {
-            "type": "object",
-            "required": ["columns"],
-            "properties": {
-              "columns": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "name",
-                  "model_name",
-                  "model_type",
-                  "geometry",
-                  "solver_type",
-                  "execution_backend",
-                  "status",
-                  "config_path",
-                  "created_time",
-                  "start_time",
-                  "end_time",
-                  "input_path",
-                  "output_path",
-                  "error_message"
-                ],
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" },
-                  "model_name": { "type": "string" },
-                  "model_type": { "type": "string" },
-                  "geometry": { "type": "string" },
-                  "solver_type": { "type": "string" },
-                  "execution_backend": { "type": "string" },
-                  "status": { "type": "string" },
-                  "config_path": { "type": "string" },
-                  "created_time": { "type": "string", "format": "date-time" },
-                  "start_time": { "type": "string", "format": "date-time" },
-                  "end_time": { "type": "string", "format": "date-time" },
-                  "input_path": { "type": "string" },
-                  "output_path": { "type": "string" },
-                  "error_message": { "type": "string" }
-                }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Database Configuration Schema",
+  "description": "Schema for validating database configuration and declarative table definitions used by FHNLab.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["db_type", "db_path", "tables"],
+
+  "properties": {
+    "db_type": {
+      "type": "string",
+      "enum": ["sqlite", "postgresql", "mysql"],
+      "description": "Type of the database backend."
+    },
+
+    "db_path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to SQLite database file or connection string for other database backends."
+    },
+
+    "tables": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["experiments", "logs"],
+
+      "properties": {
+        "experiments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["columns"],
+
+          "properties": {
+            "columns": {
+              "type": "object",
+              "description": "Column definitions for the experiments table.",
+              "additionalProperties": false,
+
+              "required": [
+                "id",
+                "name",
+                "model_name",
+                "model_type",
+                "geometry",
+                "solver_type",
+                "execution_backend",
+                "status",
+                "config_path",
+                "created_time",
+                "start_time",
+                "end_time",
+                "input_path",
+                "output_path",
+                "error_message"
+              ],
+
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "model_name": { "type": "string" },
+                "model_type": { "type": "string" },
+                "geometry": { "type": "string" },
+                "solver_type": { "type": "string" },
+                "execution_backend": { "type": "string" },
+                "status": { "type": "string" },
+                "config_path": { "type": "string" },
+                "created_time": { "type": "string" },
+                "start_time": { "type": "string" },
+                "end_time": { "type": "string" },
+                "input_path": { "type": "string" },
+                "output_path": { "type": "string" },
+                "error_message": { "type": "string" }
               }
             }
-          },
-          "logs": {
-            "type": "object",
-            "required": ["columns"],
-            "properties": {
-              "columns": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "experiment_id",
-                  "timestamp",
-                  "level",
-                  "message"
-                ],
-                "properties": {
-                  "id": { "type": "string" },
-                  "experiment_id": { "type": "string" },
-                  "timestamp": { "type": "string", "format": "date-time" },
-                  "level": { "type": "string" },
-                  "message": { "type": "string" }
-                }
+          }
+        },
+
+        "logs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["columns"],
+
+          "properties": {
+            "columns": {
+              "type": "object",
+              "description": "Column definitions for the logs table.",
+              "additionalProperties": false,
+
+              "required": [
+                "id",
+                "experiment_id",
+                "timestamp",
+                "level",
+                "message"
+              ],
+
+              "properties": {
+                "id": { "type": "string" },
+                "experiment_id": { "type": "string" },
+                "timestamp": { "type": "string" },
+                "level": { "type": "string" },
+                "message": { "type": "string" }
               }
             }
           }
@@ -87,4 +108,4 @@
       }
     }
   }
-  
+}
