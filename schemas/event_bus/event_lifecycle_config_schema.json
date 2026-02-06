@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Event Lifecycle Configuration Schema",
+  "description": "Schema for validating declarative event lifecycle and notification configuration.",
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["enabled", "states", "events"],
+
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable the event bus lifecycle handling."
+    },
+
+    "states": {
+      "type": "array",
+      "description": "List of valid lifecycle states for experiments.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "CREATED",
+          "INITIALIZED",
+          "RUNNING",
+          "COMPLETED",
+          "FAILED",
+          "CANCELLED"
+        ]
+      },
+      "minItems": 3,
+      "uniqueItems": true
+    },
+
+    "events": {
+      "type": "object",
+      "description": "Mapping of lifecycle events to notification actions.",
+      "patternProperties": {
+        "^on_[a-z_]+$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["notify"],
+
+          "properties": {
+            "notify": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": ["log", "email", "database"]
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "enabled": true,
+
+  "states": [
+    "CREATED",
+    "INITIALIZED",
+    "RUNNING",
+    "COMPLETED",
+    "FAILED",
+    "CANCELLED"
+  ],
+
+  "events": {
+    "on_start": {
+      "notify": ["log"]
+    },
+    "on_success": {
+      "notify": ["log", "email"]
+    },
+    "on_failure": {
+      "notify": ["log", "email", "database"]
+    },
+    "on_cancel": {
+      "notify": ["log"]
+    }
+  }
+}
