@@ -1,0 +1,26 @@
+{
+    "experiment_name": "FitzHughNagumo_surface",
+    "description": "FitzHugh-Nagumo model on 2D surface manifold",
+  
+    "model_config": "configs/models/fhn_surface_model.json",
+    "solver_config": "configs/solvers/rk5_surface.json",
+  
+    "plot_configs": [
+      "configs/plots/v_surface_animation.json"
+    ],
+  
+    "logging_config": "configs/logging/log_config.json",
+  
+    "execution": {
+      "backend": "auto"
+    },
+  
+    "output_path": "results/fhn_surface",
+  
+    "repetitions": 1,
+  
+    "tags": ["FHN", "surface", "manifold"],
+  
+    "notes": "Surface-based reaction-diffusion simulation relevant to cardiac tissue."
+  }
+  

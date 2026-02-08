@@ -1,0 +1,26 @@
+{
+    "experiment_name": "FitzHughNagumo_curve",
+    "description": "FitzHugh-Nagumo model on 1D curved manifold",
+  
+    "model_config": "configs/models/fhn_curve_model.json",
+    "solver_config": "configs/solvers/rk5_curve.json",
+  
+    "plot_configs": [
+      "configs/plots/v_curve_profile.json"
+    ],
+  
+    "logging_config": "configs/logging/log_config.json",
+  
+    "execution": {
+      "backend": "auto"
+    },
+  
+    "output_path": "results/fhn_curve",
+  
+    "repetitions": 1,
+  
+    "tags": ["FHN", "curve", "manifold"],
+  
+    "notes": "Electrophysiological signal propagation on a curved geometry."
+  }
+  

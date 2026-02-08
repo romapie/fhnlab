@@ -42,7 +42,7 @@
       "properties": {
         "backend": {
           "type": "string",
-          "enum": ["local", "remote"]
+          "enum": ["auto", "local", "remote"]
         }
       },
       "additionalProperties": false

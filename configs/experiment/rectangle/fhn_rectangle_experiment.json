@@ -1,0 +1,26 @@
+{
+    "experiment_name": "FitzHughNagumo_2D_rectangle",
+    "description": "2D FitzHugh-Nagumo model on rectangular domain",
+  
+    "model_config": "configs/models/fhn_rectangle_model.json",
+    "solver_config": "configs/solvers/rk5_rectangle.json",
+  
+    "plot_configs": [
+      "configs/plots/v_surface.json"
+    ],
+  
+    "logging_config": "configs/logging/log_config.json",
+  
+    "execution": {
+      "backend": "auto"
+    },
+  
+    "output_path": "results/fhn_rectangle",
+  
+    "repetitions": 1,
+  
+    "tags": ["FHN", "2D", "rectangle"],
+  
+    "notes": "Simulation of wave propagation on a rectangular domain."
+  }
+  
