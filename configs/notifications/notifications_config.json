@@ -6,16 +6,20 @@
     "smtp_host": "smtp.example.com",
     "smtp_port": 465,
     "use_ssl": true,
+
     "user": "user@example.com",
-    "password": "secret",
+    "password_env": "FHN_EMAIL_PASSWORD",
+
     "from": "fhnlab@example.com",
+
     "to": [
       "researcher@example.com"
     ],
-    "on_events": [
-      "EXPERIMENT_STARTED",
-      "EXPERIMENT_FINISHED",
-      "EXPERIMENT_FAILED"
+
+    "on_states": [
+      "RUNNING",
+      "COMPLETED",
+      "FAILED"
     ]
   }
 }
